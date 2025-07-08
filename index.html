@@ -45,8 +45,8 @@
         .message-animation {
             /* popIn runs once, then blink and sparkle loop */
             animation: popIn 1s ease-out forwards,
-                        blink 1.5s infinite alternate 1s, /* Starts after popIn, loops */
-                        sparkle 1s infinite alternate 1s; /* Starts after popIn, loops */
+                       blink 1.5s infinite alternate 1s, /* Starts after popIn, loops */
+                       sparkle 1s infinite alternate 1s; /* Starts after popIn, loops */
             opacity: 0; /* Initial state for popIn */
             transform: scale(0.8); /* Initial state for popIn */
         }
@@ -283,13 +283,11 @@
             object-fit: contain; /* Maintain aspect ratio */
             border-radius: 0.75rem;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            animation: imageFade 1s ease-in-out; /* Fade effect for image change */
+            opacity: 1; /* Initial state for fade-in */
+            transition: opacity 0.7s ease-in-out; /* Smooth fade transition */
         }
 
-        @keyframes imageFade {
-            0% { opacity: 0; transform: scale(0.9); }
-            100% { opacity: 1; transform: scale(1); }
-        }
+        /* No @keyframes imageFade needed anymore as we use transition */
 
         /* Adjust font sizes for letter on smaller screens */
         @media (max-width: 767px) {
@@ -380,13 +378,8 @@
             </div>
         </div>
 
-        <!-- Play Music Button - Added here -->
-        <button id="playMusicButton" class="mt-8 px-6 py-3 bg-purple-500 text-white font-bold rounded-full shadow-lg hover:bg-purple-600 transition-colors duration-300 transform hover:scale-105">
-            Putar Musik
-        </button>
-
         <!-- Skip Button -->
-        <button id="skipButton" class="mt-4 px-6 py-3 bg-pink-500 text-white font-bold rounded-full shadow-lg hover:bg-pink-600 transition-colors duration-300 transform hover:scale-105">
+        <button id="skipButton" class="mt-8 px-6 py-3 bg-pink-500 text-white font-bold rounded-full shadow-lg hover:bg-pink-600 transition-colors duration-300 transform hover:scale-105">
             Lewati
         </button>
     </div>
@@ -454,29 +447,9 @@
         // Audio elements
         const backgroundMusic = document.getElementById('backgroundMusic');
         const musicIllustration = document.getElementById('musicIllustration');
-        const playMusicButton = document.getElementById('playMusicButton'); // Get the new button
 
         // Flag to ensure music only attempts to play once on first interaction
         let musicPlayedOnce = false; // Declared in global scope
-
-        // Function to play music and show illustration
-        function playBackgroundMusic() {
-            if (!musicPlayedOnce) {
-                backgroundMusic.volume = 0.5; // Set initial volume
-                backgroundMusic.play().then(() => {
-                    musicIllustration.style.opacity = '1'; // Show music illustration
-                    musicPlayedOnce = true;
-                    console.log("Music started playing.");
-                    // Hide the play music button if it exists
-                    if (playMusicButton) {
-                        playMusicButton.classList.add('hidden');
-                    }
-                }).catch(e => {
-                    console.error("Music autoplay was prevented:", e);
-                    // If music cannot play, perhaps show a message or keep the button visible
-                });
-            }
-        }
 
         // Letter content for typing animation - UPDATED POEM CONTENT
         const letterContentParagraphs = [
@@ -603,14 +576,16 @@
         // Function to start the photo collage rotation
         function startCollageRotation() {
             const collageImageElement = document.getElementById('collageImage');
+            const fadeDuration = 700; // Match CSS transition duration
+
             collageInterval = setInterval(() => {
                 collageImageElement.style.opacity = 0; // Fade out
                 setTimeout(() => {
                     currentImageIndex = (currentImageIndex + 1) % collageImages.length;
                     collageImageElement.src = collageImages[currentImageIndex];
                     collageImageElement.style.opacity = 1; // Fade in
-                }, 500); // Half a second for fade out/in
-            }, 3000); // Change image every 3 seconds
+                }, fadeDuration); // Wait for fade out to complete before changing src and fading in
+            }, 2000 + fadeDuration * 2); // 2 seconds display + fade out + fade in
         }
 
         // Function to trigger the end animation and message
@@ -654,13 +629,18 @@
 
             // Hide the skip button if it was still visible
             document.getElementById('skipButton').classList.add('hidden');
-            // Hide the play music button if it was still visible
-            if (playMusicButton) {
-                playMusicButton.classList.add('hidden');
-            }
 
-            // Play music and show illustration
-            playBackgroundMusic();
+            // Play music and show illustration only if not played yet (triggered by user interaction)
+            if (!musicPlayedOnce) {
+                backgroundMusic.volume = 0.5; // Set initial volume
+                backgroundMusic.play().then(() => {
+                    musicIllustration.style.opacity = '1'; // Show music illustration
+                    musicPlayedOnce = true;
+                    console.log("Music started playing from triggerEndAnimation and illustration shown.");
+                }).catch(e => {
+                    console.error("Music autoplay from triggerEndAnimation was prevented:", e);
+                });
+            }
         }
 
         // Function to show the letter and collage with smooth transition
@@ -711,23 +691,25 @@
         }, 1000);
 
         // Add event listener to the skip button
-        document.getElementById('skipButton').addEventListener('click', () => {
-            playBackgroundMusic(); // Try to play music on skip
-            triggerEndAnimation();
-        });
-
-        // Add event listener to the new play music button
-        if (playMusicButton) {
-            playMusicButton.addEventListener('click', playBackgroundMusic);
-        }
+        document.getElementById('skipButton').addEventListener('click', triggerEndAnimation);
 
         // --- Universal click listener for music playback ---
         // This attempts to play music on the very first user interaction with the document
         // This listener is crucial for autoplay policies in modern browsers.
         document.addEventListener('click', function playMusicOnFirstInteraction() {
-            playBackgroundMusic(); // Call the unified function
-            // Remove this listener once music has successfully played (handled inside playBackgroundMusic)
-            // No need to remove here, as playBackgroundMusic handles musicPlayedOnce and button hiding.
+            if (!musicPlayedOnce) {
+                backgroundMusic.volume = 0.5;
+                backgroundMusic.play().then(() => {
+                    musicIllustration.style.opacity = '1'; // Show music illustration
+                    musicPlayedOnce = true;
+                    console.log("Music started playing from universal click listener and illustration shown.");
+                    // Remove this listener once music has successfully played
+                    document.removeEventListener('click', playMusicOnFirstInteraction);
+                }).catch(e => {
+                    console.warn("Music play on first interaction was prevented:", e);
+                    // If still blocked, user might need to click the 'Lanjut' button or wait for countdown end.
+                });
+            }
         }, { once: true }); // Use { once: true } to ensure it only runs once
     </script>
 </body>
