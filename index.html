@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Momen Spesial Segera Tiba</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Canvas Confetti CDN for realistic confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+    <!-- Google Font for Handwriting Style -->
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        /* Custom font for better aesthetics */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FCE4EC; /* Light Pink background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            color: #333333; /* Dark text color for contrast */
+            overflow: hidden; /* Hide overflow for confetti */
+        }
+        .countdown-container {
+            background-color: #F8BBD0; /* Pink 200 for container */
+            padding: 2.5rem; /* Increased padding */
+            border-radius: 1.5rem; /* More rounded corners */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2); /* Softer shadow */
+            text-align: center;
+            max-width: 90%; /* Ensure responsiveness */
+            width: 500px; /* Max width for desktop */
+            animation: fadeIn 1s ease-out;
+            position: relative; /* For confetti positioning */
+            z-index: 10; /* Ensure container is above confetti */
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Feminine animation for the birthday message and new titles */
+        .message-animation {
+            /* popIn runs once, then blink and sparkle loop */
+            animation: popIn 1s ease-out forwards,
+                       blink 1.5s infinite alternate 1s, /* Starts after popIn, loops */
+                       sparkle 1s infinite alternate 1s; /* Starts after popIn, loops */
+            opacity: 0; /* Initial state for popIn */
+            transform: scale(0.8); /* Initial state for popIn */
+        }
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            70% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Blink animation */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; } /* Subtle blink effect */
+        }
+
+        /* Sparkle animation using text-shadow */
+        @keyframes sparkle {
+            0%, 100% {
+                text-shadow: 0 0 5px #FFDAB9, /* Light peach glow */
+                             0 0 10px #FFC0CB; /* Light pink glow */
+            }
+            50% {
+                text-shadow: 0 0 10px #FF69B4, /* Hot pink glow */
+                             0 0 20px #FF1493; /* Deep pink glow */
+            }
+        }
+
+        .countdown-item {
+            background-color: #F48FB1; /* Pink 300 for items */
+            padding: 1rem 1.5rem;
+            border-radius: 0.75rem; /* Rounded corners for items */
+            margin: 0.5rem;
+            flex: 1; /* Allow items to grow and shrink */
+            min-width: 80px; /* Minimum width for items */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Softer shadow for items */
+            transition: transform 0.2s ease-in-out;
+        }
+        .countdown-item:hover {
+            transform: translateY(-5px); /* Slight lift on hover */
+        }
+        .countdown-value {
+            font-size: 2.5rem; /* Larger font for values */
+            font-weight: 700;
+            color: #D81B60; /* Pink 700 for values */
+        }
+        .countdown-label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            color: #424242; /* Darker grey for labels */
+        }
+
+        /* Responsive adjustments for countdown container */
+        @media (max-width: 640px) {
+            .countdown-value {
+                font-size: 1.8rem; /* Smaller font on mobile */
+            }
+            .countdown-label {
+                font-size: 0.75rem;
+            }
+            .countdown-container {
+                padding: 1.5rem;
+            }
+            .countdown-grid {
+                flex-wrap: wrap; /* Wrap items on smaller screens */
+                justify-content: center;
+            }
+            .countdown-item {
+                flex-basis: 45%; /* Two items per row on small screens */
+                margin: 0.5rem 0.25rem;
+            }
+        }
+
+        /* Full-screen message styling */
+        .full-screen-message {
+            position: fixed; /* Use fixed to ensure it covers the whole viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-color: #FCE4EC; /* Match body background */
+            z-index: 20; /* Ensure it's above everything else */
+            text-align: center;
+            padding: 1rem; /* Add some padding */
+            transition: opacity 0.5s ease-in-out; /* Smooth fade transition */
+        }
+
+        /* Responsive font sizes for the message */
+        .message-text {
+            font-size: 3rem; /* Default for smaller screens */
+            line-height: 1.2;
+        }
+        @media (min-width: 640px) { /* sm */
+            .message-text {
+                font-size: 4rem;
+            }
+        }
+        @media (min-width: 768px) { /* md */
+            .message-text {
+                font-size: 5rem;
+            }
+        }
+        @media (min-width: 1024px) { /* lg */
+            .message-text {
+                font-size: 6rem;
+            }
+        }
+        @media (min-width: 1280px) { /* xl */
+            .message-text {
+                font-size: 7rem;
+            }
+        }
+
+        /* New styles for letter and collage layout */
+        .full-screen-layout {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex; /* Use flexbox for two columns */
+            flex-direction: column; /* Default to column for mobile */
+            background-color: #FCE4EC; /* Match body background */
+            z-index: 20; /* Above countdown, below message */
+            opacity: 0; /* Initially hidden for fade-in */
+            transition: opacity 0.5s ease-in-out; /* Smooth fade transition */
+        }
+        .full-screen-layout.visible {
+            opacity: 1; /* Make visible for fade-in */
+        }
+        @media (min-width: 768px) { /* md breakpoint */
+            .full-screen-layout {
+                flex-direction: row; /* Row for wider screens */
+            }
+        }
+
+        .letter-section, .collage-section {
+            flex: 1; /* Each takes equal space */
+            display: flex;
+            flex-direction: column; /* For letter content alignment */
+            justify-content: center;
+            align-items: center;
+            padding: 1.5rem; /* Adjusted padding for lines */
+            overflow: hidden; /* Ensure no scrollbar and content is clipped if too long */
+            box-sizing: border-box; /* Include padding in width/height */
+        }
+
+        .letter-section {
+            background-color: #FFFFFF; /* White paper */
+            border: 1px solid #e0e0e0; /* Subtle border */
+            /* Realistic lined paper effect */
+            background-image:
+                linear-gradient(to right, #FFDAB9 1px, transparent 1px), /* Vertical margin line (Peach) */
+                linear-gradient(to bottom, #e0e0e0 1px, transparent 1px); /* Horizontal lines (Light Grey) */
+            background-size: 1px 100%, 100% 22px; /* Vertical line 1px width, full height; Horizontal lines 100% width, 22px height */
+            background-position: 30px 0, 0 10px; /* Vertical line at 30px from left, Horizontal lines start at 10px from top */
+            background-repeat: no-repeat, repeat-y; /* Vertical line no-repeat, horizontal lines repeat vertically */
+
+            border-radius: 1rem;
+            margin: 1rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Slightly more prominent shadow */
+            max-width: 95%; /* Ensure content fits within section */
+            max-height: 95%; /* Ensure content fits within section */
+            text-align: left; /* Ensure text aligns left within the box */
+            padding: 10px 1.5rem 10px 40px; /* Adjusted padding to align text with lines: top 10px, left 30px (margin) + 10px (text padding) */
+            line-height: 22px; /* Match horizontal line spacing - adjusted for Caveat */
+            font-size: 0.8rem; /* Base font size for letter content - adjusted for Caveat */
+            font-family: 'Caveat', cursive; /* Apply handwriting font */
+        }
+        /* Specific styling for typed content within the letter section */
+        .letter-typed-area h2 {
+            text-align: center; /* Centered now */
+            margin-bottom: 22px; /* Add space for a line below title - adjusted */
+            line-height: 22px; /* Adjusted */
+            padding: 0;
+            text-indent: 0; /* Ensure no indent */
+            font-size: 1.1rem; /* Smaller title font */
+            font-weight: bold; /* Ensure bold for title */
+            color: #D81B60; /* Pink 700 for title */
+            font-family: 'Caveat', cursive; /* Apply handwriting font */
+        }
+        .letter-typed-area p {
+            text-indent: 0; /* REMOVED text-indent to align wrapped lines */
+            margin-bottom: 0; /* Remove default paragraph margins to align with lines */
+            padding: 0;
+            line-height: 22px; /* Adjusted */
+            font-size: 0.8rem; /* Default paragraph font size - adjusted */
+            text-align: left; /* Ensure left alignment */
+            font-family: 'Caveat', cursive; /* Apply handwriting font */
+        }
+        /* Typing animation cursor */
+        .letter-typed-area span.typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.1em; /* Adjust to font size */
+            background-color: currentColor;
+            animation: blink-cursor 0.8s infinite;
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+        @keyframes blink-cursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Styling for the signature */
+        .letter-typed-area .signature {
+            font-weight: bold;
+            font-size: 1.1rem; /* Slightly larger for signature */
+            margin-top: 22px; /* Space before signature */
+            text-align: right; /* Align signature to the right */
+            padding-right: 1.5rem; /* Match right padding of the letter section */
+            width: 100%; /* Ensure it takes full width for right alignment */
+            box-sizing: border-box; /* Include padding in width */
+        }
+
+
+        .collage-section {
+            background-color: #E1F5FE; /* Light blue background for collage */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 1rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .collage-image {
+            max-width: 95%; /* Ensure image fits */
+            max-height: 95%; /* Ensure image fits */
+            object-fit: contain; /* Maintain aspect ratio */
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            animation: imageFade 1s ease-in-out; /* Fade effect for image change */
+        }
+
+        @keyframes imageFade {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Adjust font sizes for letter on smaller screens */
+        @media (max-width: 767px) {
+            .letter-section {
+                font-size: 0.65rem; /* Even smaller font on mobile */
+                margin: 0.5rem;
+                padding: 8px 1rem 8px 35px; /* Adjusted padding */
+                background-size: 1px 100%, 100% 18px; /* Adjusted horizontal line size */
+                background-position: 25px 0, 0 8px; /* Adjusted line positions */
+                line-height: 18px; /* Adjusted for mobile */
+            }
+            .letter-typed-area h2 {
+                font-size: 0.8rem; /* Smaller title font on mobile */
+                line-height: 18px;
+                margin-bottom: 18px;
+            }
+            .letter-typed-area p {
+                font-size: 0.65rem; /* Smaller paragraph font on mobile */
+                line-height: 18px;
+            }
+            .letter-typed-area .signature {
+                font-size: 0.9rem; /* Smaller signature font on mobile */
+                margin-top: 18px; /* Space before signature */
+            }
+        }
+
+        /* Music illustration styling */
+        #musicIllustration {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: rgba(248, 187, 208, 0.8); /* Pink 200 with transparency */
+            padding: 8px 15px;
+            border-radius: 9999px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            color: #D81B60; /* Pink 700 for notes */
+            font-size: 1.5rem; /* Larger for visibility */
+            z-index: 30;
+            opacity: 0; /* Initially hidden */
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        .music-note {
+            animation: pulse 1s infinite alternate;
+        }
+        .music-note:nth-child(2) {
+            animation-delay: 0.2s; /* Stagger animation */
+        }
+        .music-note:nth-child(3) {
+            animation-delay: 0.4s; /* Stagger animation */
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <!-- The message will now be a full-screen overlay, outside the countdown-container -->
+    <p id="countdown-message" class="text-pink-700 font-extrabold hidden"></p>
+
+    <div class="countdown-container" id="mainCountdownContainer">
+        <!-- These elements are visible during countdown and hidden when it ends -->
+        <h1 id="specialMomentTitle" class="text-4xl font-bold mb-6 text-gray-800">Sebuah Momen Istimewa Segera Tiba...</h1>
+        <p id="countdownSubtitle" class="text-lg mb-8 text-gray-600">Countdown...</p>
+
+        <div id="countdown" class="flex justify-center items-center flex-wrap countdown-grid">
+            <div class="countdown-item">
+                <div id="days" class="countdown-value">0</div>
+                <div class="countdown-label">Hari</div>
+            </div>
+            <div class="countdown-item">
+                <div id="hours" class="countdown-value">0</div>
+                <div class="countdown-label">Jam</div>
+            </div>
+            <div class="countdown-item">
+                <div id="minutes" class="countdown-value">0</div>
+                <div class="countdown-label">Menit</div>
+            </div>
+            <div class="countdown-item">
+                <div id="seconds" class="countdown-value">0</div>
+                <div class="countdown-label">Detik</div>
+            </div>
+        </div>
+
+        <!-- Skip Button -->
+        <button id="skipButton" class="mt-8 px-6 py-3 bg-pink-500 text-white font-bold rounded-full shadow-lg hover:bg-pink-600 transition-colors duration-300 transform hover:scale-105">
+            Lewati
+        </button>
+    </div>
+
+    <!-- New container for letter and collage, initially hidden -->
+    <div id="letterAndCollageContainer" class="hidden full-screen-layout">
+        <div class="letter-section">
+            <!-- Content will be typed here dynamically -->
+            <div id="typedLetterContent" class="letter-typed-area"></div>
+        </div>
+        <div class="collage-section">
+            <!-- Image source updated to use the first image from the provided list -->
+            <img id="collageImage" src="images/PXL_20250512_065138897.jpg" alt="Kolase Foto" class="collage-image">
+        </div>
+    </div>
+
+    <!-- Audio Player - Autoplay enabled, no controls -->
+    <audio id="backgroundMusic" loop>
+        <!-- Updated source to local audio file -->
+        <source src="audio/music.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
+    <!-- Music Illustration Display -->
+    <div id="musicIllustration">
+        <!-- SVG for a single music note, repeated for effect -->
+        <svg class="music-note" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        </svg>
+        <svg class="music-note" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        </svg>
+        <svg class="music-note" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        </svg>
+    </div>
+
+    <script>
+        // Set the target date for the countdown to July 17, 2025
+        const targetDate = new Date('July 17, 2025 00:00:00').getTime();
+
+        // Define SVG paths for heart and star shapes
+        const heart = confetti.shapeFromPath({
+            path: 'M10 3.2C10 1.6 8.4 0 6.8 0S3.2 1.6 3.2 3.2c0 1.6 1.6 3.2 3.2 4.8 1.6-1.6 3.2-3.2 3.2-4.8z',
+            width: 10,
+            height: 10
+        });
+
+        const star = confetti.shapeFromPath({
+            path: 'M9.7 0.3L7.5 4.5L3 5.2L6.3 8.5L5.5 13L9.7 10.7L14 13L13.2 8.5L16.5 5.2L12 4.5L9.7 0.3z',
+            width: 10,
+            height: 10
+        });
+
+        // Array of image URLs for the collage - UPDATED TO ACTUAL FILENAMES
+        const collageImages = [
+            'images/PXL_20250512_065138897.jpg',
+            'images/PXL_20250602_104324943.PORTRAIT.jpg'
+            // Add more image paths here if you have more photos in your 'images' folder
+            // e.g., 'images/PXL_20250603_xxxxxxxxx.jpg',
+        ];
+        let currentImageIndex = 0;
+        let collageInterval; // To store the interval for collage
+
+        // Audio elements
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const musicIllustration = document.getElementById('musicIllustration');
+
+        // Flag to ensure music only attempts to play once on first interaction
+        let musicPlayedOnce = false; // Declared in global scope
+
+        // Letter content for typing animation - UPDATED POEM CONTENT
+        const letterContentParagraphs = [
+            "Selamat ulang tahun istriku", // This will be the H2 title
+            "Yuli, bunga Juli yang mekar di hati,",
+            "Kau cemerlang, nyala di jiwa.",
+            "Dwi, harmoni ganda, cinta nan merdu,",
+            "Nur, cahaya suci, rindu tak pernah pudar.",
+            "Aini, mata hati, kasih di hidupku.",
+            "", // Blank line
+            "Namamu skrip cinta, terukir di sanubari,",
+            "Barisnya menari, merangkai kasih abadi.",
+            "Yuli Dwi Nur Aini, jiwa yang selalu online,",
+            "Di ulang tahunmu, ku-commit cinta,",
+            "meski kadang tak sempurna, sayang!",
+            "", // Blank line
+            "Selamat ulang tahun, istriku,",
+            "selalu ada di pelukku,",
+            "Kau fondasi hati, melodi jiwa,",
+            "cinta Niko Hasda Prayogo.",
+            "Tanpa kopi dan masalah,",
+            "kau bikin hidupku compile sempurna,",
+            "Meski dompetku sering menipis,",
+            "cintaku tetap utuh untukmu, Yuli!",
+            "", // Blank line for signature spacing
+            "Niko Hasda Prayogo" // Signature
+        ];
+
+        let currentParagraphIndex = 0;
+        let currentCharIndex = 0;
+        const typingSpeed = 50; // milliseconds per character
+        const paragraphDelay = 700; // milliseconds delay between paragraphs
+
+        let typingCursorElement; // To hold the blinking cursor
+
+        // Function to handle typing animation for the letter
+        function typeLetterContent() {
+            const typedLetterContentElement = document.getElementById('typedLetterContent');
+            // Clear previous content and cursor
+            typedLetterContentElement.innerHTML = '';
+            currentParagraphIndex = 0;
+            currentCharIndex = 0;
+
+            // Create initial cursor
+            typingCursorElement = document.createElement('span');
+            typingCursorElement.className = 'typing-cursor';
+            typedLetterContentElement.appendChild(typingCursorElement);
+
+
+            function typeChar() {
+                if (currentParagraphIndex < letterContentParagraphs.length) {
+                    const currentText = letterContentParagraphs[currentParagraphIndex];
+                    let targetElement;
+
+                    // Determine if it's the title or a paragraph
+                    if (currentParagraphIndex === 0) { // First line is the title
+                        targetElement = document.createElement('h2');
+                        targetElement.className = 'text-2xl font-bold text-pink-700';
+                        typedLetterContentElement.appendChild(targetElement);
+                    } else {
+                        targetElement = document.createElement('p');
+                        targetElement.className = '';
+                        typedLetterContentElement.appendChild(targetElement);
+                    }
+
+                    // Move cursor to the new line/paragraph
+                    typedLetterContentElement.appendChild(typingCursorElement);
+
+                    let charInterval = setInterval(() => {
+                        if (currentCharIndex < currentText.length) {
+                            targetElement.textContent += currentText.charAt(currentCharIndex);
+                            currentCharIndex++;
+                        } else {
+                            clearInterval(charInterval); // Stop typing for current paragraph
+                            
+                            // Add extra vertical spacing for specific lines if needed
+                            if (currentParagraphIndex === 0) { // After typing the title
+                                targetElement.style.marginBottom = '22px'; // Adjusted to match new line-height
+                            } else if (currentParagraphIndex === 5 || currentParagraphIndex === 11 || currentParagraphIndex === 16 || currentParagraphIndex === 21) { // Adjusted indices for blank lines and signature
+                                // Add an empty paragraph to represent the blank line
+                                const blankLine = document.createElement('p');
+                                blankLine.textContent = ''; // Empty text
+                                blankLine.style.marginBottom = '0'; // Ensure it takes only its line-height
+                                typedLetterContentElement.appendChild(blankLine);
+                                typedLetterContentElement.appendChild(typingCursorElement); // Move cursor after blank line
+                            } else if (currentParagraphIndex === letterContentParagraphs.length - 1) { // Last line is the signature
+                                targetElement.classList.add('signature'); // Apply signature styling
+                            }
+
+
+                            currentCharIndex = 0;
+                            currentParagraphIndex++;
+
+                            if (currentParagraphIndex < letterContentParagraphs.length) {
+                                // Delay before starting next paragraph
+                                setTimeout(typeChar, paragraphDelay);
+                            } else {
+                                // All typing complete, remove cursor
+                                if (typingCursorElement && typingCursorElement.parentNode) {
+                                    typingCursorElement.parentNode.removeChild(typingCursorElement);
+                                }
+                            }
+                        }
+                    }, typingSpeed);
+                }
+            }
+            typeChar(); // Start typing the first paragraph
+        }
+
+
+        // Function to launch confetti
+        function launchConfetti() {
+            confetti({
+                particleCount: 150, // More particles
+                spread: 120, // Wider spread
+                origin: { y: 0.6 }, // Start from slightly lower
+                colors: ['#FFC0CB', '#FF69B4', '#FF1493', '#FFDAB9', '#F06290'], // Feminine color palette
+                shapes: ['circle', 'square', heart, star], // Include heart and star shapes
+                scalar: 1.2, // Make particles slightly larger
+                disableForReducedMotion: true // Good accessibility practice
+            });
+        }
+
+        // Function to start the photo collage rotation
+        function startCollageRotation() {
+            const collageImageElement = document.getElementById('collageImage');
+            collageInterval = setInterval(() => {
+                collageImageElement.style.opacity = 0; // Fade out
+                setTimeout(() => {
+                    currentImageIndex = (currentImageIndex + 1) % collageImages.length;
+                    collageImageElement.src = collageImages[currentImageIndex];
+                    collageImageElement.style.opacity = 1; // Fade in
+                }, 500); // Half a second for fade out/in
+            }, 3000); // Change image every 3 seconds
+        }
+
+        // Function to trigger the end animation and message
+        function triggerEndAnimation() {
+            clearInterval(countdownInterval); // Stop the countdown
+            document.getElementById('mainCountdownContainer').classList.add('hidden'); // Hide the main countdown container
+
+            const messageElement = document.getElementById('countdown-message');
+            messageElement.classList.remove('hidden'); // Show message
+            messageElement.classList.add('full-screen-message', 'message-text');
+            messageElement.innerHTML = 'Selamat Ulang Tahun Istriku<br>Yuli Dwi Nur Aini!';
+            messageElement.classList.add('message-animation'); // Add feminine animation animation class
+
+            // Trigger confetti 3 times with a 1-second delay between each
+            launchConfetti();
+            setTimeout(launchConfetti, 1000);
+            setTimeout(launchConfetti, 2000);
+
+            // Show the "Lanjut" button after all confetti bursts (2 seconds + animation duration)
+            setTimeout(() => {
+                const continueButton = document.createElement('button');
+                continueButton.id = 'continueButton';
+                continueButton.className = 'mt-8 px-6 py-3 bg-pink-500 text-white font-bold rounded-full shadow-lg hover:bg-pink-600 transition-colors duration-300 transform hover:scale-105';
+                continueButton.textContent = 'Lanjut';
+                continueButton.style.zIndex = '25'; // Ensure button is above confetti
+                continueButton.style.position = 'fixed'; // Position it relative to viewport
+                continueButton.style.bottom = '50px'; // Adjust position
+                continueButton.style.left = '50%';
+                continueButton.style.transform = 'translateX(-50%)';
+                continueButton.style.opacity = '0'; // Start hidden for fade-in
+                continueButton.style.transition = 'opacity 0.5s ease-in-out'; // Add transition
+                document.body.appendChild(continueButton); // Append to body
+                
+                // Fade in the button
+                setTimeout(() => {
+                    continueButton.style.opacity = '1';
+                }, 100); // Small delay to ensure transition applies
+
+                continueButton.addEventListener('click', showLetterAndCollage);
+            }, 2500); // Wait for all confetti to finish + a little extra
+
+            // Hide the skip button if it was still visible
+            document.getElementById('skipButton').classList.add('hidden');
+
+            // Play music and show illustration only if not played yet (triggered by user interaction)
+            if (!musicPlayedOnce) {
+                backgroundMusic.volume = 0.5; // Set initial volume
+                backgroundMusic.play().then(() => {
+                    musicIllustration.style.opacity = '1'; // Show music illustration
+                    musicPlayedOnce = true;
+                    console.log("Music started playing from triggerEndAnimation and illustration shown.");
+                }).catch(e => {
+                    console.error("Music autoplay from triggerEndAnimation was prevented:", e);
+                });
+            }
+        }
+
+        // Function to show the letter and collage with smooth transition
+        function showLetterAndCollage() {
+            const messageElement = document.getElementById('countdown-message');
+            const continueButton = document.getElementById('continueButton');
+            const letterAndCollageContainer = document.getElementById('letterAndCollageContainer');
+
+            // Fade out the message and continue button
+            messageElement.style.opacity = '0';
+            if (continueButton) { // Check if button exists before trying to fade
+                continueButton.style.opacity = '0';
+            }
+            
+            // After fade out, hide them and show the new container with fade-in
+            setTimeout(() => {
+                messageElement.classList.add('hidden');
+                if (continueButton) {
+                    continueButton.classList.add('hidden');
+                }
+
+                letterAndCollageContainer.classList.remove('hidden'); // Make it visible
+                letterAndCollageContainer.classList.add('visible'); // Trigger fade-in
+                startCollageRotation(); // Start rotating photos
+                typeLetterContent(); // Start typing animation for the letter
+            }, 500); // Match this duration with the CSS transition duration
+        }
+
+
+        // Update the countdown every 1 second
+        const countdownInterval = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('days').innerHTML = days;
+            document.getElementById('hours').innerHTML = hours;
+            document.getElementById('minutes').innerHTML = minutes;
+            document.getElementById('seconds').innerHTML = seconds;
+
+            if (distance < 0) {
+                triggerEndAnimation();
+            }
+        }, 1000);
+
+        // Add event listener to the skip button
+        document.getElementById('skipButton').addEventListener('click', triggerEndAnimation);
+
+        // --- Universal click listener for music playback ---
+        // This attempts to play music on the very first user interaction with the document
+        // This listener is crucial for autoplay policies in modern browsers.
+        document.addEventListener('click', function playMusicOnFirstInteraction() {
+            if (!musicPlayedOnce) {
+                backgroundMusic.volume = 0.5;
+                backgroundMusic.play().then(() => {
+                    musicIllustration.style.opacity = '1'; // Show music illustration
+                    musicPlayedOnce = true;
+                    console.log("Music started playing from universal click listener and illustration shown.");
+                    // Remove this listener once music has successfully played
+                    document.removeEventListener('click', playMusicOnFirstInteraction);
+                }).catch(e => {
+                    console.warn("Music play on first interaction was prevented:", e);
+                    // If still blocked, user might need to click the 'Lanjut' button or wait for countdown end.
+                });
+            }
+        }, { once: true }); // Use { once: true } to ensure it only runs once
+    </script>
+</body>
+</html>
