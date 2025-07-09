@@ -171,7 +171,7 @@
             width: 100%;
             height: 100%;
             display: flex;
-            flex-direction: column; /* Always column for top/bottom layout */
+            flex-direction: column; /* Default to column for mobile */
             background-color: #FCE4EC; /* Match body background */
             z-index: 20; /* Above countdown, below message */
             opacity: 0; /* Initially hidden for fade-in */
@@ -180,10 +180,13 @@
         .full-screen-layout.visible {
             opacity: 1; /* Make visible for fade-in */
         }
-        /* No need for @media (min-width: 768px) { flex-direction: row; } anymore */
+        @media (min-width: 768px) {
+            .full-screen-layout {
+                flex-direction: row; /* Side-by-side on larger screens */
+            }
+        }
 
         .letter-section, .collage-section {
-            flex: 0 0 50%; /* Each takes exactly 50% height */
             display: flex;
             flex-direction: column; /* For content alignment */
             justify-content: center;
@@ -203,6 +206,7 @@
             background-size: 1px 100%, 100% 26px; /* Vertical line 1px width, full height; Horizontal lines 100% width, 26px height */
             background-position: 20px 0, 0 10px; /* Vertical line at 20px from left, Horizontal lines start at 10px from top */
             background-repeat: no-repeat, repeat-y; /* Vertical line no-repeat, horizontal lines repeat vertically */
+            background-attachment: local; /* Lines scroll with content */
 
             border-radius: 1rem;
             margin: 1rem;
@@ -212,9 +216,19 @@
             text-align: left; /* Ensure text aligns left within the box */
             padding: 10px 1.5rem 10px 30px; /* Adjusted padding to align text with lines: top 10px, left 20px (margin) + 10px (text padding) */
             line-height: 26px; /* Match horizontal line spacing - adjusted for Caveat */
-            font-size: 0.9rem; /* Base font size for letter content - adjusted */
+            font-size: 1rem; /* Base font size for letter content - adjusted */
             font-family: 'Caveat', cursive; /* Apply handwriting font */
+            flex: 1; /* Take remaining space in column layout */
+            overflow-y: auto; /* Enable vertical scrolling for the poem */
         }
+        @media (min-width: 768px) {
+            .letter-section {
+                flex: 0 0 70%; /* 70% width on larger screens */
+                margin-right: 0; /* Adjust margins when side-by-side */
+                border-radius: 1rem 0 0 1rem; /* Rounded left corners */
+            }
+        }
+        
         /* Specific styling for typed content within the letter section */
         .letter-typed-area {
             position: relative;
@@ -222,25 +236,10 @@
             width: 100%;
             display: flex;
             flex-direction: column;
-            justify-content: space-between; /* Distribute content vertically */
+            justify-content: flex-start; /* Align content to the top */
             align-items: flex-start; /* Align content to the left */
             padding-top: 10px; /* Add padding to align with first line */
             box-sizing: border-box; /* Include padding in width/height */
-        }
-
-        .poem-content-columns {
-            display: flex;
-            flex-direction: row; /* Two columns for desktop */
-            width: 100%;
-            flex: 1; /* Take available vertical space */
-            justify-content: space-around; /* Distribute space between columns */
-            align-items: flex-start; /* Align content to the top of columns */
-            padding-right: 1.5rem; /* Adjust padding for right side */
-        }
-
-        .poem-column {
-            flex: 1; /* Each column takes equal space */
-            padding: 0 0.5rem; /* Padding between columns */
         }
 
         .letter-typed-area h2 {
@@ -260,7 +259,7 @@
             margin-bottom: 0; /* Remove default paragraph margins to align with lines */
             padding: 0;
             line-height: 26px; /* Adjusted */
-            font-size: 0.9rem; /* Default paragraph font size - adjusted */
+            font-size: 1rem; /* Default paragraph font size - adjusted */
             text-align: left; /* Ensure left alignment */
             font-family: 'Caveat', cursive; /* Apply handwriting font */
         }
@@ -287,29 +286,42 @@
             margin: 1rem;
             border-radius: 1rem;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            overflow-x: auto; /* Allow horizontal scrolling if images exceed width */
-            overflow-y: hidden; /* Hide vertical scrollbar */
+            overflow-y: hidden; /* Hide vertical scrollbar for the section itself */
+            flex: 1; /* Take remaining space in column layout */
+        }
+        @media (min-width: 768px) {
+            .collage-section {
+                flex: 0 0 30%; /* 30% width on larger screens */
+                margin-left: 0; /* Adjust margins when side-by-side */
+                border-radius: 0 1rem 1rem 0; /* Rounded right corners */
+            }
         }
 
         #imageCarousel {
-            display: flex; /* Display images in a row */
+            display: flex; /* Display images in a column */
+            flex-direction: column;
+            align-items: center; /* Center images horizontally */
             flex-shrink: 0; /* Prevent the carousel itself from shrinking */
-            height: 100%;
-            /* No transform animation here, just static display */
+            width: 100%; /* Take full width of the container */
+            padding: 1rem 0; /* Add some vertical padding */
+            /* Animation will be added here by JS */
         }
-
+        
         .collage-image {
             flex-shrink: 0; /* Prevent images from shrinking */
-            width: 250px; /* Fixed width for each image */
-            height: 90%; /* Take up most of the height of the section */
+            width: 90%; /* Take up most of the width of the section */
+            max-width: 250px; /* Maximum width for each image */
+            height: auto; /* Maintain aspect ratio */
             object-fit: contain; /* Maintain aspect ratio */
             border-radius: 0.75rem;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            margin-right: 1rem; /* Space between images */
-            /* No transition or animation for images for static display */
-            transition: none;
+            margin-bottom: 1rem; /* Space between images vertically */
             opacity: 1;
+            transition: none; /* No individual fade transition on images for continuous scroll */
         }
+
+        /* Animation for vertical scrolling - defined dynamically by JS */
+        /* @keyframes scrollUp { ... } */
 
         /* Adjust font sizes for letter on smaller screens */
         @media (max-width: 767px) {
@@ -336,13 +348,8 @@
             }
             .collage-image {
                 width: 180px; /* Smaller width for mobile */
-                margin-right: 0.5rem;
-            }
-            .poem-content-columns {
-                flex-direction: column; /* Stack columns vertically on mobile */
-            }
-            .poem-column {
-                padding: 0; /* No horizontal padding between columns on mobile */
+                margin-right: 0; /* No horizontal margin on mobile in vertical stack */
+                margin-bottom: 0.5rem; /* Smaller vertical margin on mobile */
             }
         }
 
@@ -421,32 +428,28 @@
         <div class="letter-section">
             <div id="typedLetterContent" class="letter-typed-area">
                 <h2 class="text-2xl font-bold text-pink-700">Selamat ulang tahun istriku</h2>
-                <div class="poem-content-columns">
-                    <div class="poem-column poem-column-left">
-                        <p>Yuli, bunga Juli yang mekar di hati,</p>
-                        <p>Kau cemerlang, nyala di jiwa.</p>
-                        <p>Dwi, harmoni ganda, cinta nan merdu,</p>
-                        <p>Nur, cahaya suci, rindu tak pernah pudar.</p>
-                        <p>Aini, mata hati, kasih di hidupku.</p>
-                        <p></p> <!-- Blank line -->
-                        <p>Namamu skrip cinta, terukir di sanubari,</p>
-                        <p>Barisnya menari, merangkai kasih abadi.</p>
-                        <p>Yuli Dwi Nur Aini, jiwa yang selalu online,</p>
-                        <p>Di ulang tahunmu, ku-commit cinta,</p>
-                    </div>
-                    <div class="poem-column poem-column-right">
-                        <p>meski kadang tak sempurna, sayang!</p>
-                        <p></p> <!-- Blank line -->
-                        <p>Selamat ulang tahun, istriku,</p>
-                        <p>selalu ada di pelukku,</p>
-                        <p>Kau fondasi hati, melodi jiwa,</p>
-                        <p>cinta Niko Hasda Prayogo.</p>
-                        <p>Tanpa kopi dan masalah,</p>
-                        <p>kau bikin hidupku compile sempurna,</p>
-                        <p>Meski dompetku sering menipis,</p>
-                        <p>cintaku tetap utuh untukmu, Yuli!</p>
-                    </div>
-                </div>
+                <!-- Poem content is now a single column -->
+                <p>Yuli, bunga Juli yang mekar di hati,</p>
+                <p>Kau cemerlang, nyala di jiwa.</p>
+                <p>Dwi, harmoni ganda, cinta nan merdu,</p>
+                <p>Nur, cahaya suci, rindu tak pernah pudar.</p>
+                <p>Aini, mata hati, kasih di hidupku.</p>
+                <p></p> <!-- Blank line -->
+                <p>Namamu skrip cinta, terukir di sanubari,</p>
+                <p>Barisnya menari, merangkai kasih abadi.</p>
+                <p>Yuli Dwi Nur Aini, jiwa yang selalu online,</p>
+                <p>Di ulang tahunmu, ku-commit cinta,</p>
+                <p>meski kadang tak sempurna, sayang!</p>
+                <p></p> <!-- Blank line -->
+                <p>Selamat ulang tahun, istriku,</p>
+                <p>selalu ada di pelukku,</p>
+                <p>Kau fondasi hati, melodi jiwa,</p>
+                <p>cinta Niko Hasda Prayogo.</p>
+                <p>Tanpa kopi dan masalah,</p>
+                <p>kau bikin hidupku compile sempurna,</p>
+                <p>Meski dompetku sering menipis,</p>
+                <p>cintaku tetap utuh untukmu, Yuli!</p>
+                <p></p> <!-- Blank line for signature spacing -->
                 <p class="signature">Niko Hasda Prayogo</p>
             </div>
         </div>
@@ -512,10 +515,9 @@
         // Flag to ensure music only attempts to play once on first interaction
         let musicPlayedOnce = false; // Declared in global scope
 
-        // Function to display poem lines (now static) - REMOVED TYPING LOGIC
+        // Function to display poem lines (now static)
         function displayPoemLines() {
-            // No typing animation, content is already in HTML
-            // Just ensure the letter section is correctly displayed if needed
+            // Poem content is now static in HTML, no need for JS to append
             console.log("Poem content is static and displayed.");
         }
 
@@ -533,19 +535,93 @@
             });
         }
 
-        // Function to start the photo collage (now static) - REMOVED ANIMATION LOGIC
+        // Function to display all collage images and start vertical scrolling
         function displayCollageImages() {
             const imageCarousel = document.getElementById('imageCarousel');
             imageCarousel.innerHTML = ''; // Clear any existing images
 
-            collageImages.forEach(src => {
+            // Duplicate images to create a seamless loop
+            const duplicatedCollageImages = [...collageImages, ...collageImages, ...collageImages]; 
+            
+            duplicatedCollageImages.forEach(src => {
                 const img = document.createElement('img');
                 img.src = src;
                 img.alt = "Kolase Foto";
                 img.classList.add('collage-image');
                 imageCarousel.appendChild(img);
             });
-            console.log("All collage images displayed statically.");
+
+            // Calculate total height for animation
+            // Wait for images to load to get accurate height
+            let imagesLoadedCount = 0;
+            let totalImagesHeight = 0;
+            const imageMarginBottom = 16; // 1rem = 16px (from CSS margin-bottom: 1rem)
+
+            // Function to calculate height after images are loaded
+            const calculateAndAnimate = () => {
+                totalImagesHeight = 0;
+                // Sum up height of *one set* of original images
+                for (let i = 0; i < collageImages.length; i++) {
+                    const imgElement = imageCarousel.children[i];
+                    if (imgElement) {
+                        totalImagesHeight += imgElement.offsetHeight + imageMarginBottom;
+                    }
+                }
+                // Adjust for the last image's margin not contributing to scrollable height
+                if (collageImages.length > 0) {
+                    totalImagesHeight -= imageMarginBottom;
+                }
+
+                if (totalImagesHeight > 0) {
+                    const animationSpeedFactor = 20; // Adjust this value: higher = slower, lower = faster
+                    const animationDuration = totalImagesHeight / animationSpeedFactor; // seconds
+
+                    // Create dynamic keyframes
+                    const styleSheet = document.createElement("style");
+                    styleSheet.type = "text/css";
+                    styleSheet.innerText = `
+                        @keyframes scrollUpDynamic {
+                            0% { transform: translateY(0); }
+                            100% { transform: translateY(-${totalImagesHeight}px); }
+                        }
+                    `;
+                    document.head.appendChild(styleSheet);
+                    
+                    // Apply animation
+                    imageCarousel.style.animation = `scrollUpDynamic ${animationDuration}s linear infinite`;
+                    console.log(`Collage animation started: totalHeight=${totalImagesHeight}px, duration=${animationDuration}s`);
+                } else {
+                    console.warn("Could not calculate total image height for collage animation.");
+                }
+            };
+
+            // Load listener for each image to ensure height is calculated correctly
+            duplicatedCollageImages.forEach((src, index) => {
+                const imgElement = imageCarousel.children[index];
+                if (imgElement) {
+                    imgElement.onload = () => {
+                        imagesLoadedCount++;
+                        if (imagesLoadedCount === duplicatedCollageImages.length) {
+                            // All images are loaded, now calculate and animate
+                            calculateAndAnimate();
+                        }
+                    };
+                    imgElement.onerror = () => {
+                        console.error(`Failed to load image: ${src}`);
+                        imagesLoadedCount++; // Still count as loaded to proceed
+                        if (imagesLoadedCount === duplicatedCollageImages.length) {
+                            calculateAndAnimate();
+                        }
+                    };
+                }
+            });
+
+            // Fallback if images are cached or load too fast for onload to trigger calculation
+            setTimeout(() => {
+                if (totalImagesHeight === 0) { // If height wasn't calculated by onload
+                    calculateAndAnimate();
+                }
+            }, 1000); // Give it a second
         }
 
 
