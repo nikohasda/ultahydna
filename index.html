@@ -9,7 +9,7 @@
     <!-- Canvas Confetti CDN for realistic confetti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <!-- Google Font for Handwriting Style -->
-    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* Custom font for better aesthetics */
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
@@ -215,9 +215,9 @@
             max-height: 95%; /* Ensure content fits within section */
             text-align: left; /* Ensure text aligns left within the box */
             padding: 10px 1.5rem 10px 30px; /* Adjusted padding to align text with lines: top 10px, left 20px (margin) + 10px (text padding) */
-            line-height: 26px; /* Match horizontal line spacing - adjusted for Caveat */
-            font-size: 1rem; /* Base font size for letter content - adjusted */
-            font-family: 'Caveat', cursive; /* Apply handwriting font */
+            line-height: 26px; /* Match horizontal line spacing - adjusted for Dancing Script */
+            font-size: 1.1rem; /* Base font size for letter content - Adjusted for Dancing Script */
+            font-family: 'Dancing Script', cursive; /* Apply handwriting font */
             flex: 1; /* Take remaining space in column layout */
             overflow-y: auto; /* Enable vertical scrolling for the poem */
         }
@@ -248,10 +248,10 @@
             line-height: 26px; /* Adjusted */
             padding: 0;
             text-indent: 0; /* Ensure no indent */
-            font-size: 1.2rem; /* Smaller title font */
-            font-weight: bold; /* Ensure bold for title */
+            font-size: 1.5rem; /* Larger title font */
+            font-weight: 700; /* Bolder weight for Dancing Script */
             color: #D81B60; /* Pink 700 for title */
-            font-family: 'Caveat', cursive; /* Apply handwriting font */
+            font-family: 'Dancing Script', cursive; /* Apply handwriting font */
             width: 100%; /* Take full width for centering */
         }
         .letter-typed-area p {
@@ -259,22 +259,58 @@
             margin-bottom: 0; /* Remove default paragraph margins to align with lines */
             padding: 0;
             line-height: 26px; /* Adjusted */
-            font-size: 1rem; /* Default paragraph font size - adjusted */
+            font-size: 1.1rem; /* Default paragraph font size - Adjusted for Dancing Script */
             text-align: left; /* Ensure left alignment */
-            font-family: 'Caveat', cursive; /* Apply handwriting font */
+            font-family: 'Dancing Script', cursive; /* Apply handwriting font */
         }
-        /* Typing animation cursor - now hidden */
-        .letter-typed-area span.typing-cursor { display: none; }
+        /* Typing animation cursor */
+        .letter-typed-area span.typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.1em; /* Adjust to font size */
+            background-color: currentColor;
+            animation: blink-cursor 0.8s infinite;
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+        @keyframes blink-cursor {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
 
         /* Styling for the signature */
         .letter-typed-area .signature {
-            font-weight: bold;
-            font-size: 1.2rem; /* Slightly larger for signature */
+            font-weight: 700; /* Bolder weight for Dancing Script */
+            font-size: 1.5rem; /* Slightly larger for signature */
             margin-top: 26px; /* Space before signature */
             text-align: right; /* Align signature to the right */
             padding-right: 1.5rem; /* Match right padding of the letter section */
             width: 100%; /* Ensure it takes full width for right alignment */
             box-sizing: border-box; /* Include padding in width */
+            font-family: 'Dancing Script', cursive; /* Apply handwriting font */
+        }
+
+        /* Poem line animation */
+        /* Removed .poem-line.visible-line as typing handles visibility */
+        .poem-line {
+            display: block; /* Ensure each line takes its own space */
+            width: 100%; /* Take full width of its container */
+            box-sizing: border-box;
+        }
+        /* Specific styling for poem lines that are h2 or signature */
+        .poem-line.h2-title {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #D81B60;
+            margin-bottom: 26px; /* Match line-height for spacing */
+        }
+        .poem-line.signature-line {
+            font-weight: bold;
+            font-size: 1.2rem;
+            text-align: right;
+            margin-top: 26px; /* Match line-height for spacing */
+            padding-right: 1.5rem; /* Ensure it's aligned with the paper's right padding */
         }
 
 
@@ -427,30 +463,7 @@
     <div id="letterAndCollageContainer" class="hidden full-screen-layout">
         <div class="letter-section">
             <div id="typedLetterContent" class="letter-typed-area">
-                <h2 class="text-2xl font-bold text-pink-700">Selamat ulang tahun istriku</h2>
-                <!-- Poem content is now a single column -->
-                <p>Yuli, bunga Juli yang mekar di hati,</p>
-                <p>Kau cemerlang, nyala di jiwa.</p>
-                <p>Dwi, harmoni ganda, cinta nan merdu,</p>
-                <p>Nur, cahaya suci, rindu tak pernah pudar.</p>
-                <p>Aini, mata hati, kasih di hidupku.</p>
-                <p></p> <!-- Blank line -->
-                <p>Namamu skrip cinta, terukir di sanubari,</p>
-                <p>Barisnya menari, merangkai kasih abadi.</p>
-                <p>Yuli Dwi Nur Aini, jiwa yang selalu online,</p>
-                <p>Di ulang tahunmu, ku-commit cinta,</p>
-                <p>meski kadang tak sempurna, sayang!</p>
-                <p></p> <!-- Blank line -->
-                <p>Selamat ulang tahun, istriku,</p>
-                <p>selalu ada di pelukku,</p>
-                <p>Kau fondasi hati, melodi jiwa,</p>
-                <p>cinta Niko Hasda Prayogo.</p>
-                <p>Tanpa kopi dan masalah,</p>
-                <p>kau bikin hidupku compile sempurna,</p>
-                <p>Meski dompetku sering menipis,</p>
-                <p>cintaku tetap utuh untukmu, Yuli!</p>
-                <p></p> <!-- Blank line for signature spacing -->
-                <p class="signature">Niko Hasda Prayogo</p>
+                <!-- Content will be typed here dynamically by JS -->
             </div>
         </div>
         <div class="collage-section">
@@ -515,10 +528,82 @@
         // Flag to ensure music only attempts to play once on first interaction
         let musicPlayedOnce = false; // Declared in global scope
 
-        // Function to display poem lines (now static)
+        // Letter content for typing animation
+        const letterContentParagraphs = [
+            { type: 'h2', text: "Selamat ulang tahun, Sayang!" },
+            { type: 'p', text: "Tak terasa, sudah berapa banyak tahun yang kita lewati bersama. Mengingat kembali hari lahirmu tanggal 17 Juli, rasanya baru kemarin kita bertemu di tahun 2014. Sejak itu, duniaku jadi jauh lebih berwarna." },
+            { type: 'p', text: "" }, // Blank line
+            { type: 'p', text: "Aku masih ingat jelas tanggal 14 September 2016, hari kita resmi jadian. Rasanya seperti baru kemarin kita memulai kisah cinta kita, penuh tawa, cerita, dan semua suka duka yang kita bagi. Dan puncaknya, tanggal 29 November 2022, kita berjanji untuk selalu bersama. Setiap hari bersamamu adalah anugerah terindah." },
+            { type: 'p', text: "" }, // Blank line
+            { type: 'p', text: "Terima kasih sudah menjadi istri yang luar biasa, teman hidup yang selalu mendukung, dan belahan jiwaku. Kamu adalah segalanya bagiku, Yul. Aku berharap kamu selalu bahagia, sehat, dan semua impianmu bisa tercapai." },
+            { type: 'p', text: "" }, // Blank line
+            { type: 'p', text: "Aku mencintaimu, sekarang dan selamanya." },
+            { type: 'p', text: "" }, // Blank line
+            { type: 'p', text: "Dengan segenap hati," },
+            { type: 'p', text: "" }, // Blank line for signature spacing
+            { type: 'p', text: "Niko Hasda Prayogo", class: 'signature-line' } // Signature
+        ];
+
+        let currentPoemLineIndex = 0;
+        const lineDisplayDelay = 50; // milliseconds per character for typing
+        const paragraphDelay = 700; // milliseconds delay between paragraphs
+
+        // Function to display poem lines with typing animation
         function displayPoemLines() {
-            // Poem content is now static in HTML, no need for JS to append
-            console.log("Poem content is static and displayed.");
+            const typedLetterContentElement = document.getElementById('typedLetterContent');
+            typedLetterContentElement.innerHTML = ''; // Clear existing content
+            currentPoemLineIndex = 0;
+
+            let typingCursorElement = document.createElement('span');
+            typingCursorElement.className = 'typing-cursor';
+            typedLetterContentElement.appendChild(typingCursorElement);
+
+            function typeNextCharInLine(lineElement, text, charIndex, callback) {
+                if (charIndex < text.length) {
+                    lineElement.textContent += text.charAt(charIndex);
+                    setTimeout(() => {
+                        typeNextCharInLine(lineElement, text, charIndex + 1, callback);
+                    }, lineDisplayDelay);
+                } else {
+                    if (callback) callback();
+                }
+            }
+
+            function displayNextPoemLine() {
+                if (currentPoemLineIndex < letterContentParagraphs.length) {
+                    const lineData = letterContentParagraphs[currentPoemLineIndex];
+                    let lineElement;
+
+                    if (lineData.type === 'h2') {
+                        lineElement = document.createElement('h2');
+                        lineElement.classList.add('h2-title');
+                    } else {
+                        lineElement = document.createElement('p');
+                    }
+
+                    // Add custom classes if defined in lineData
+                    if (lineData.class) {
+                        lineElement.classList.add(lineData.class);
+                    }
+
+                    typedLetterContentElement.appendChild(lineElement);
+                    typedLetterContentElement.appendChild(typingCursorElement); // Move cursor to the new line
+
+                    // Start typing animation for the current line
+                    typeNextCharInLine(lineElement, lineData.text, 0, () => {
+                        currentPoemLineIndex++;
+                        if (currentPoemLineIndex < letterContentParagraphs.length) {
+                            setTimeout(displayNextPoemLine, paragraphDelay);
+                        } else {
+                            // All lines typed, remove cursor
+                            if (typingCursorElement && typingCursorElement.parentNode) {
+                                typingCursorElement.parentNode.removeChild(typingCursorElement);
+                            }
+                        }
+                    });
+                }
+            }
+            displayNextPoemLine(); // Start the poem display
         }
 
 
@@ -702,7 +787,7 @@
                 letterAndCollageContainer.classList.remove('hidden'); // Make it visible
                 letterAndCollageContainer.classList.add('visible'); // Trigger fade-in
                 displayCollageImages(); // Display all collage images statically
-                displayPoemLines(); // Ensure poem is displayed (now static)
+                displayPoemLines(); // Start poem typing animation
             }, 500); // Match this duration with the CSS transition duration
         }
 
