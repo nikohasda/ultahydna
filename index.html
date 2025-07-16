@@ -203,7 +203,7 @@
             background-image:
                 linear-gradient(to right, #FFDAB9 1px, transparent 1px), /* Vertical margin line (Peach) */
                 linear-gradient(to bottom, #e0e0e0 1px, transparent 1px); /* Horizontal lines (Light Grey) */
-            background-size: 1px 100%, 100% 26px; /* Vertical line 1px width, full height; Horizontal lines 100% width, 26px height */
+            background-size: 1px 100%, 100% 52px; /* Doubled line height for larger font */
             background-position: 20px 0, 0 10px; /* Vertical line at 20px from left, Horizontal lines start at 10px from top */
             background-repeat: no-repeat, repeat-y; /* Vertical line no-repeat, horizontal lines repeat vertically */
             background-attachment: local; /* Lines scroll with content */
@@ -215,8 +215,8 @@
             max-height: 95%; /* Ensure content fits within section */
             text-align: left; /* Ensure text aligns left within the box */
             padding: 10px 1.5rem 10px 30px; /* Adjusted padding to align text with lines: top 10px, left 20px (margin) + 10px (text padding) */
-            line-height: 26px; /* Match horizontal line spacing - adjusted for Dancing Script */
-            font-size: 1.1rem; /* Base font size for letter content - Adjusted for Dancing Script */
+            line-height: 52px; /* Doubled line height */
+            font-size: 2.2rem; /* Doubled font size */
             font-family: 'Dancing Script', cursive; /* Apply handwriting font */
             flex: 1; /* Take remaining space in column layout */
             overflow-y: auto; /* Enable vertical scrolling for the poem */
@@ -244,11 +244,11 @@
 
         .letter-typed-area h2 {
             text-align: center; /* Centered now */
-            margin-bottom: 26px; /* Add space for a line below title - adjusted */
-            line-height: 26px; /* Adjusted */
+            margin-bottom: 52px; /* Doubled margin-bottom */
+            line-height: 52px; /* Doubled line height */
             padding: 0;
             text-indent: 0; /* Ensure no indent */
-            font-size: 1.5rem; /* Larger title font */
+            font-size: 3rem; /* Doubled font size */
             font-weight: 700; /* Bolder weight for Dancing Script */
             color: #D81B60; /* Pink 700 for title */
             font-family: 'Dancing Script', cursive; /* Apply handwriting font */
@@ -258,8 +258,8 @@
             text-indent: 0; /* REMOVED text-indent to align wrapped lines */
             margin-bottom: 0; /* Remove default paragraph margins to align with lines */
             padding: 0;
-            line-height: 26px; /* Adjusted */
-            font-size: 1.1rem; /* Default paragraph font size - Adjusted for Dancing Script */
+            line-height: 52px; /* Doubled line height */
+            font-size: 2.2rem; /* Doubled font size */
             text-align: left; /* Ensure left alignment */
             font-family: 'Dancing Script', cursive; /* Apply handwriting font */
         }
@@ -281,8 +281,8 @@
         /* Styling for the signature */
         .letter-typed-area .signature {
             font-weight: 700; /* Bolder weight for Dancing Script */
-            font-size: 1.5rem; /* Slightly larger for signature */
-            margin-top: 26px; /* Space before signature */
+            font-size: 3rem; /* Doubled font size */
+            margin-top: 52px; /* Doubled margin-top */
             text-align: right; /* Align signature to the right */
             padding-right: 1.5rem; /* Match right padding of the letter section */
             width: 100%; /* Ensure it takes full width for right alignment */
@@ -300,14 +300,14 @@
         /* Specific styling for poem lines that are h2 or signature */
         .poem-line.h2-title {
             text-align: center;
-            font-size: 1.2rem;
+            font-size: 1.2rem; /* Base size before doubling */
             font-weight: bold;
             color: #D81B60;
             margin-bottom: 26px; /* Match line-height for spacing */
         }
         .poem-line.signature-line {
             font-weight: bold;
-            font-size: 1.2rem;
+            font-size: 1.2rem; /* Base size before doubling */
             text-align: right;
             margin-top: 26px; /* Match line-height for spacing */
             padding-right: 1.5rem; /* Ensure it's aligned with the paper's right padding */
@@ -362,25 +362,25 @@
         /* Adjust font sizes for letter on smaller screens */
         @media (max-width: 767px) {
             .letter-section {
-                font-size: 0.75rem; /* Even smaller font on mobile */
+                font-size: 1.5rem; /* Doubled font size for mobile */
                 margin: 0.5rem;
                 padding: 8px 1rem 8px 35px; /* Adjusted padding */
-                background-size: 1px 100%, 100% 20px; /* Adjusted horizontal line size */
+                background-size: 1px 100%, 100% 40px; /* Doubled horizontal line size */
                 background-position: 25px 0, 0 8px; /* Adjusted line positions */
-                line-height: 20px; /* Adjusted for mobile */
+                line-height: 40px; /* Doubled line height for mobile */
             }
             .letter-typed-area h2 {
-                font-size: 1rem; /* Smaller title font on mobile */
-                line-height: 20px;
-                margin-bottom: 20px;
+                font-size: 2rem; /* Doubled title font for mobile */
+                line-height: 40px;
+                margin-bottom: 40px;
             }
             .letter-typed-area p {
-                font-size: 0.75rem; /* Smaller paragraph font on mobile */
-                line-height: 20px;
+                font-size: 1.5rem; /* Doubled paragraph font for mobile */
+                line-height: 40px;
             }
             .letter-typed-area .signature {
-                font-size: 1rem; /* Smaller signature font on mobile */
-                margin-top: 20px; /* Space before signature */
+                font-size: 2rem; /* Doubled signature font for mobile */
+                margin-top: 40px; /* Doubled margin-top */
             }
             .collage-image {
                 width: 180px; /* Smaller width for mobile */
