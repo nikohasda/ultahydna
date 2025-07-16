@@ -186,6 +186,7 @@
             }
         }
 
+        /* Letter and Collage Section Sizing & Styling */
         .letter-section, .collage-section {
             display: flex;
             flex-direction: column; /* For content alignment */
@@ -199,7 +200,6 @@
         .letter-section {
             background-color: #FFFFFF; /* White paper */
             border: 1px solid #e0e0e0; /* Subtle border */
-            /* Realistic lined paper effect */
             background-image:
                 linear-gradient(to right, #FFDAB9 1px, transparent 1px), /* Vertical margin line (Peach) */
                 linear-gradient(to bottom, #e0e0e0 1px, transparent 1px); /* Horizontal lines (Light Grey) */
@@ -219,13 +219,25 @@
             font-size: 2.2rem; /* Doubled font size */
             font-family: 'Dancing Script', cursive; /* Apply handwriting font */
             flex: 1; /* Take remaining space in column layout */
-            overflow-y: auto; /* Enable vertical scrolling for the poem */
+            /* overflow-y: auto; REMOVED for mobile auto-scroll */
         }
         @media (min-width: 768px) {
             .letter-section {
                 flex: 0 0 70%; /* 70% width on larger screens */
                 margin-right: 0; /* Adjust margins when side-by-side */
                 border-radius: 1rem 0 0 1rem; /* Rounded left corners */
+                overflow-y: auto; /* Enable manual scroll for desktop */
+            }
+        }
+        @media (max-width: 767px) { /* Mobile specific styles */
+            .letter-section {
+                font-size: 1.5rem; /* Doubled font size for mobile */
+                margin: 0.5rem;
+                padding: 8px 1rem 8px 35px; /* Adjusted padding */
+                background-size: 1px 100%, 100% 40px; /* Doubled horizontal line size */
+                background-position: 25px 0, 0 8px; /* Adjusted line positions */
+                line-height: 40px; /* Doubled line height for mobile */
+                overflow-y: hidden; /* Hide scrollbar for auto-scroll */
             }
         }
         
@@ -242,6 +254,15 @@
             box-sizing: border-box; /* Include padding in width/height */
         }
 
+        #poemContentScroller {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start; /* Align content to the left */
+            width: 100%;
+            will-change: transform; /* Optimize for animation */
+            /* Animation will be applied by JS for mobile */
+        }
+
         .letter-typed-area h2 {
             text-align: center; /* Centered now */
             margin-bottom: 52px; /* Doubled margin-bottom */
@@ -254,6 +275,14 @@
             font-family: 'Dancing Script', cursive; /* Apply handwriting font */
             width: 100%; /* Take full width for centering */
         }
+        @media (max-width: 767px) {
+            .letter-typed-area h2 {
+                font-size: 2rem; /* Doubled title font for mobile */
+                line-height: 40px;
+                margin-bottom: 40px;
+            }
+        }
+
         .letter-typed-area p {
             text-indent: 0; /* REMOVED text-indent to align wrapped lines */
             margin-bottom: 0; /* Remove default paragraph margins to align with lines */
@@ -263,6 +292,13 @@
             text-align: left; /* Ensure left alignment */
             font-family: 'Dancing Script', cursive; /* Apply handwriting font */
         }
+        @media (max-width: 767px) {
+            .letter-typed-area p {
+                font-size: 1.5rem; /* Doubled paragraph font for mobile */
+                line-height: 40px;
+            }
+        }
+
         /* Typing animation cursor */
         .letter-typed-area span.typing-cursor {
             display: inline-block;
@@ -289,28 +325,11 @@
             box-sizing: border-box; /* Include padding in width */
             font-family: 'Dancing Script', cursive; /* Apply handwriting font */
         }
-
-        /* Poem line animation */
-        /* Removed .poem-line.visible-line as typing handles visibility */
-        .poem-line {
-            display: block; /* Ensure each line takes its own space */
-            width: 100%; /* Take full width of its container */
-            box-sizing: border-box;
-        }
-        /* Specific styling for poem lines that are h2 or signature */
-        .poem-line.h2-title {
-            text-align: center;
-            font-size: 1.2rem; /* Base size before doubling */
-            font-weight: bold;
-            color: #D81B60;
-            margin-bottom: 26px; /* Match line-height for spacing */
-        }
-        .poem-line.signature-line {
-            font-weight: bold;
-            font-size: 1.2rem; /* Base size before doubling */
-            text-align: right;
-            margin-top: 26px; /* Match line-height for spacing */
-            padding-right: 1.5rem; /* Ensure it's aligned with the paper's right padding */
+        @media (max-width: 767px) {
+            .letter-typed-area .signature {
+                font-size: 2rem; /* Doubled signature font for mobile */
+                margin-top: 40px; /* Doubled margin-top */
+            }
         }
 
 
@@ -361,27 +380,6 @@
 
         /* Adjust font sizes for letter on smaller screens */
         @media (max-width: 767px) {
-            .letter-section {
-                font-size: 1.5rem; /* Doubled font size for mobile */
-                margin: 0.5rem;
-                padding: 8px 1rem 8px 35px; /* Adjusted padding */
-                background-size: 1px 100%, 100% 40px; /* Doubled horizontal line size */
-                background-position: 25px 0, 0 8px; /* Adjusted line positions */
-                line-height: 40px; /* Doubled line height for mobile */
-            }
-            .letter-typed-area h2 {
-                font-size: 2rem; /* Doubled title font for mobile */
-                line-height: 40px;
-                margin-bottom: 40px;
-            }
-            .letter-typed-area p {
-                font-size: 1.5rem; /* Doubled paragraph font for mobile */
-                line-height: 40px;
-            }
-            .letter-typed-area .signature {
-                font-size: 2rem; /* Doubled signature font for mobile */
-                margin-top: 40px; /* Doubled margin-top */
-            }
             .collage-image {
                 width: 180px; /* Smaller width for mobile */
                 margin-right: 0; /* No horizontal margin on mobile in vertical stack */
@@ -462,8 +460,19 @@
     <!-- New container for letter and collage, initially hidden -->
     <div id="letterAndCollageContainer" class="hidden full-screen-layout">
         <div class="letter-section">
-            <div id="typedLetterContent" class="letter-typed-area">
-                <!-- Content will be typed here dynamically by JS -->
+            <div id="poemContentScroller">
+                <h2 class="h2-title">Selamat ulang tahun, Sayang!</h2>
+                <p>Tak terasa, sudah berapa banyak tahun yang kita lewati bersama. Mengingat kembali hari lahirmu tanggal 17 Juli, rasanya baru kemarin kita bertemu di tahun 2014. Sejak itu, duniaku jadi jauh lebih berwarna.</p>
+                <p></p>
+                <p>Aku masih ingat jelas tanggal 14 September 2016, hari kita resmi jadian. Rasanya seperti baru kemarin kita memulai kisah cinta kita, penuh tawa, cerita, dan semua suka duka yang kita bagi. Dan puncaknya, tanggal 29 November 2022, kita berjanji untuk selalu bersama. Setiap hari bersamamu adalah anugerah terindah.</p>
+                <p></p>
+                <p>Terima kasih sudah menjadi istri yang luar biasa, teman hidup yang selalu mendukung, dan belahan jiwaku. Kamu adalah segalanya bagiku, Yul. Aku berharap kamu selalu bahagia, sehat, dan semua impianmu bisa tercapai.</p>
+                <p></p>
+                <p>Aku mencintaimu, sekarang dan selamanya.</p>
+                <p></p>
+                <p>Dengan segenap hati,</p>
+                <p></p>
+                <p class="signature-line">Niko Hasda Prayogo</p>
             </div>
         </div>
         <div class="collage-section">
@@ -579,82 +588,59 @@
         // Flag to ensure music only attempts to play once on first interaction
         let musicPlayedOnce = false; // Declared in global scope
 
-        // Letter content for typing animation
-        const letterContentParagraphs = [
-            { type: 'h2', text: "Selamat ulang tahun, Sayang!" },
-            { type: 'p', text: "Tak terasa, sudah berapa banyak tahun yang kita lewati bersama. Mengingat kembali hari lahirmu tanggal 17 Juli, rasanya baru kemarin kita bertemu di tahun 2014. Sejak itu, duniaku jadi jauh lebih berwarna." },
-            { type: 'p', text: "" }, // Blank line
-            { type: 'p', text: "Aku masih ingat jelas tanggal 14 September 2016, hari kita resmi jadian. Rasanya seperti baru kemarin kita memulai kisah cinta kita, penuh tawa, cerita, dan semua suka duka yang kita bagi. Dan puncaknya, tanggal 29 November 2022, kita berjanji untuk selalu bersama. Setiap hari bersamamu adalah anugerah terindah." },
-            { type: 'p', text: "" }, // Blank line
-            { type: 'p', text: "Terima kasih sudah menjadi istri yang luar biasa, teman hidup yang selalu mendukung, dan belahan jiwaku. Kamu adalah segalanya bagiku, Yul. Aku berharap kamu selalu bahagia, sehat, dan semua impianmu bisa tercapai." },
-            { type: 'p', text: "" }, // Blank line
-            { type: 'p', text: "Aku mencintaimu, sekarang dan selamanya." },
-            { type: 'p', text: "" }, // Blank line
-            { type: 'p', text: "Dengan segenap hati," },
-            { type: 'p', text: "" }, // Blank line for signature spacing
-            { type: 'p', text: "Niko Hasda Prayogo", class: 'signature-line' } // Signature
-        ];
-
-        let currentPoemLineIndex = 0;
-        const lineDisplayDelay = 50; // milliseconds per character for typing
-        const paragraphDelay = 700; // milliseconds delay between paragraphs
-
-        // Function to display poem lines with typing animation
+        // Function to display poem lines with auto-scrolling for mobile
         function displayPoemLines() {
-            const typedLetterContentElement = document.getElementById('typedLetterContent');
-            typedLetterContentElement.innerHTML = ''; // Clear existing content
-            currentPoemLineIndex = 0;
+            const poemContentScroller = document.getElementById('poemContentScroller');
+            
+            // Clear existing content if any (though it's static now)
+            // poemContentScroller.innerHTML = ''; 
 
-            let typingCursorElement = document.createElement('span');
-            typingCursorElement.className = 'typing-cursor';
-            typedLetterContentElement.appendChild(typingCursorElement);
-
-            function typeNextCharInLine(lineElement, text, charIndex, callback) {
-                if (charIndex < text.length) {
-                    lineElement.textContent += text.charAt(charIndex);
-                    setTimeout(() => {
-                        typeNextCharInLine(lineElement, text, charIndex + 1, callback);
-                    }, lineDisplayDelay);
-                } else {
-                    if (callback) callback();
-                }
+            // Duplicate content for seamless looping (only if on mobile)
+            if (window.innerWidth <= 767) { // Check for mobile screen size
+                const originalContent = poemContentScroller.innerHTML;
+                // Duplicate content several times to ensure a long enough scroll
+                poemContentScroller.innerHTML = originalContent + originalContent + originalContent; 
             }
 
-            function displayNextPoemLine() {
-                if (currentPoemLineIndex < letterContentParagraphs.length) {
-                    const lineData = letterContentParagraphs[currentPoemLineIndex];
-                    let lineElement;
-
-                    if (lineData.type === 'h2') {
-                        lineElement = document.createElement('h2');
-                        lineElement.classList.add('h2-title');
-                    } else {
-                        lineElement = document.createElement('p');
-                    }
-
-                    // Add custom classes if defined in lineData
-                    if (lineData.class) {
-                        lineElement.classList.add(lineData.class);
-                    }
-
-                    typedLetterContentElement.appendChild(lineElement);
-                    typedLetterContentElement.appendChild(typingCursorElement); // Move cursor to the new line
-
-                    // Start typing animation for the current line
-                    typeNextCharInLine(lineElement, lineData.text, 0, () => {
-                        currentPoemLineIndex++;
-                        if (currentPoemLineIndex < letterContentParagraphs.length) {
-                            setTimeout(displayNextPoemLine, paragraphDelay);
-                        } else {
-                            // All lines typed, remove cursor
-                            if (typingCursorElement && typingCursorElement.parentNode) {
-                                typingCursorElement.parentNode.removeChild(typingCursorElement);
-                            }
+            // Calculate total height for animation
+            let totalPoemHeight = 0;
+            const poemLines = poemContentScroller.children; // Get all direct children (h2, p)
+            if (poemLines.length > 0) {
+                // Sum up height of original content (first third if duplicated)
+                for (let i = 0; i < (window.innerWidth <= 767 ? letterContentParagraphs.length : poemLines.length); i++) {
+                    if (poemLines[i]) {
+                        totalPoemHeight += poemLines[i].offsetHeight;
+                        // Add margin-bottom if it's a paragraph (line-height handles internal spacing)
+                        if (poemLines[i].tagName === 'P' && poemLines[i].textContent === '') { // Blank lines
+                             totalPoemHeight += parseInt(window.getComputedStyle(poemLines[i]).lineHeight); // Add height for blank lines
                         }
-                    });
+                    }
                 }
             }
-            displayNextPoemLine(); // Start the poem display
+
+            if (totalPoemHeight > 0 && window.innerWidth <= 767) { // Only animate on mobile
+                const animationSpeedFactor = 10; // Adjust this value: higher = slower, lower = faster
+                const animationDuration = totalPoemHeight / animationSpeedFactor; // seconds
+
+                // Create dynamic keyframes for poem scrolling
+                const styleSheet = document.createElement("style");
+                styleSheet.type = "text/css";
+                styleSheet.innerText = `
+                    @keyframes scrollPoemUpDynamic {
+                        0% { transform: translateY(0); }
+                        100% { transform: translateY(-${totalPoemHeight}px); }
+                    }
+                `;
+                document.head.appendChild(styleSheet);
+                
+                // Apply animation
+                poemContentScroller.style.animation = `scrollPoemUpDynamic ${animationDuration}s linear infinite`;
+                console.log(`Poem animation started: totalHeight=${totalPoemHeight}px, duration=${animationDuration}s`);
+            } else {
+                // Remove animation if not on mobile or height is zero
+                poemContentScroller.style.animation = 'none';
+                console.log("Poem animation not applied (desktop or zero height).");
+            }
         }
 
 
