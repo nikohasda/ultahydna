@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Momen Spesial Segera Tiba</title>
+    <title>Momen Spesial: Teka-Teki Cinta</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Canvas Confetti CDN for realistic confetti -->
@@ -24,7 +24,7 @@
             color: #333333; /* Dark text color for contrast */
             overflow: hidden; /* Hide overflow for confetti */
         }
-        .countdown-container {
+        .quiz-container {
             background-color: #F8BBD0; /* Pink 200 for container */
             padding: 2.5rem; /* Increased padding */
             border-radius: 1.5rem; /* More rounded corners */
@@ -45,8 +45,8 @@
         .message-animation {
             /* popIn runs once, then blink and sparkle loop */
             animation: popIn 1s ease-out forwards,
-                       blink 1.5s infinite alternate 1s, /* Starts after popIn, loops */
-                       sparkle 1s infinite alternate 1s; /* Starts after popIn, loops */
+                        blink 1.5s infinite alternate 1s, /* Starts after popIn, loops */
+                        sparkle 1s infinite alternate 1s; /* Starts after popIn, loops */
             opacity: 0; /* Initial state for popIn */
             transform: scale(0.8); /* Initial state for popIn */
         }
@@ -74,49 +74,54 @@
             }
         }
 
-        .countdown-item {
-            background-color: #F48FB1; /* Pink 300 for items */
-            padding: 1rem 1.5rem;
-            border-radius: 0.75rem; /* Rounded corners for items */
-            margin: 0.5rem;
-            flex: 1; /* Allow items to grow and shrink */
-            min-width: 80px; /* Minimum width for items */
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); /* Softer shadow for items */
-            transition: transform 0.2s ease-in-out;
+        .quiz-item {
+            margin-bottom: 1.5rem; /* Space between quiz items */
         }
-        .countdown-item:hover {
-            transform: translateY(-5px); /* Slight lift on hover */
+        .quiz-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #424242;
         }
-        .countdown-value {
-            font-size: 2.5rem; /* Larger font for values */
-            font-weight: 700;
-            color: #D81B60; /* Pink 700 for values */
+        .quiz-input {
+            width: calc(100% - 2rem); /* Full width minus padding */
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #F48FB1; /* Pink 300 border */
+            background-color: #FFFFFF;
+            color: #333333;
+            font-size: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
         }
-        .countdown-label {
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            color: #424242; /* Darker grey for labels */
+        .quiz-input:focus {
+            outline: none;
+            border-color: #D81B60; /* Pink 700 on focus */
+            box-shadow: 0 0 0 3px rgba(216, 27, 96, 0.3); /* Focus ring */
         }
 
-        /* Responsive adjustments for countdown container */
-        @media (max-width: 640px) {
-            .countdown-value {
-                font-size: 1.8rem; /* Smaller font on mobile */
-            }
-            .countdown-label {
-                font-size: 0.75rem;
-            }
-            .countdown-container {
-                padding: 1.5rem;
-            }
-            .countdown-grid {
-                flex-wrap: wrap; /* Wrap items on smaller screens */
-                justify-content: center;
-            }
-            .countdown-item {
-                flex-basis: 45%; /* Two items per row on small screens */
-                margin: 0.5rem 0.25rem;
-            }
+        /* Styling for date dropdowns */
+        .date-dropdowns {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+        .date-dropdowns select {
+            padding: 0.75rem 0.5rem;
+            border-radius: 0.5rem;
+            border: 1px solid #F48FB1;
+            background-color: #FFFFFF;
+            color: #333333;
+            font-size: 1rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            flex: 1; /* Allow dropdowns to grow */
+            min-width: 80px; /* Minimum width for each dropdown */
+        }
+        .date-dropdowns select:focus {
+            outline: none;
+            border-color: #D81B60;
+            box-shadow: 0 0 0 3px rgba(216, 27, 96, 0.3);
         }
 
         /* Full-screen message styling */
@@ -219,7 +224,6 @@
             font-size: 2.2rem; /* Doubled font size */
             font-family: 'Dancing Script', cursive; /* Apply handwriting font */
             flex: 1; /* Take remaining space in column layout */
-            /* overflow-y: auto; REMOVED for mobile auto-scroll */
         }
         @media (min-width: 768px) {
             .letter-section {
@@ -315,7 +319,7 @@
         }
 
         /* Styling for the signature */
-        .letter-typed-area .signature {
+        .letter-typed-area .signature-line { /* Changed to signature-line for consistency */
             font-weight: 700; /* Bolder weight for Dancing Script */
             font-size: 3rem; /* Doubled font size */
             margin-top: 52px; /* Doubled margin-top */
@@ -326,7 +330,7 @@
             font-family: 'Dancing Script', cursive; /* Apply handwriting font */
         }
         @media (max-width: 767px) {
-            .letter-typed-area .signature {
+            .letter-typed-area .signature-line {
                 font-size: 2rem; /* Doubled signature font for mobile */
                 margin-top: 40px; /* Doubled margin-top */
             }
@@ -421,58 +425,123 @@
             50% { transform: scale(1.2); opacity: 0.7; }
             100% { transform: scale(1); opacity: 1; }
         }
+
+        /* Custom Modal Styling for messages */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000; /* Above everything else */
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+        .modal-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            background-color: #F8BBD0; /* Pink 200 */
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            color: #333333;
+            transform: translateY(-20px);
+            opacity: 0;
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        .modal-overlay.visible .modal-content {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        .modal-content h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #D81B60; /* Pink 700 */
+        }
+        .modal-content p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+        .modal-close-button {
+            background-color: #D81B60; /* Pink 700 */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease-in-out;
+        }
+        .modal-close-button:hover {
+            background-color: #AD1457; /* Darker Pink */
+        }
     </style>
 </head>
 <body>
-    <!-- The message will now be a full-screen overlay, outside the countdown-container -->
+    <!-- The message will now be a full-screen overlay, outside the quiz-container -->
     <p id="countdown-message" class="text-pink-700 font-extrabold hidden"></p>
 
-    <div class="countdown-container" id="mainCountdownContainer">
-        <!-- These elements are visible during countdown and hidden when it ends -->
-        <h1 id="specialMomentTitle" class="text-4xl font-bold mb-6 text-gray-800">Sebuah Momen Istimewa Segera Tiba...</h1>
-        <p id="countdownSubtitle" class="text-lg mb-8 text-gray-600">Countdown...</p>
+    <!-- Quiz Container -->
+    <div class="quiz-container" id="mainQuizContainer">
+        <h1 id="quizTitle" class="text-4xl font-bold mb-6 text-gray-800">Uji Ingatanmu, Sayang!</h1>
+        <p id="quizSubtitle" class="text-lg mb-8 text-gray-600">Jawablah pertanyaan-pertanyaan ini untuk melanjutkan.</p>
 
-        <div id="countdown" class="flex justify-center items-center flex-wrap countdown-grid">
-            <div class="countdown-item">
-                <div id="days" class="countdown-value">0</div>
-                <div class="countdown-label">Hari</div>
+        <div class="quiz-item">
+            <label for="q1" class="quiz-label block">1. Tahun berapa kita mulai kenal?</label>
+            <input type="text" id="q1" class="quiz-input" placeholder="">
+        </div>
+        <div class="quiz-item">
+            <label class="quiz-label block">2. Kapan tanggal, hari, dan tahun jadian kita?</label>
+            <div class="date-dropdowns">
+                <select id="q2-day" class="quiz-input"></select>
+                <select id="q2-month" class="quiz-input"></select>
+                <select id="q2-year" class="quiz-input"></select>
             </div>
-            <div class="countdown-item">
-                <div id="hours" class="countdown-value">0</div>
-                <div class="countdown-label">Jam</div>
-            </div>
-            <div class="countdown-item">
-                <div id="minutes" class="countdown-value">0</div>
-                <div class="countdown-label">Menit</div>
-            </div>
-            <div class="countdown-item">
-                <div id="seconds" class="countdown-value">0</div>
-                <div class="countdown-label">Detik</div>
+        </div>
+        <div class="quiz-item">
+            <label class="quiz-label block">3. Kapan kita menikah?</label>
+            <div class="date-dropdowns">
+                <select id="q3-day" class="quiz-input"></select>
+                <select id="q3-month" class="quiz-input"></select>
+                <select id="q3-year" class="quiz-input"></select>
             </div>
         </div>
 
-        <!-- Skip Button -->
-        <button id="skipButton" class="mt-8 px-6 py-3 bg-pink-500 text-white font-bold rounded-full shadow-lg hover:bg-pink-600 transition-colors duration-300 transform hover:scale-105">
-            Lewati
+        <!-- Submit Button -->
+        <button id="submitQuizButton" class="mt-8 px-6 py-3 bg-pink-500 text-white font-bold rounded-full shadow-lg hover:bg-pink-600 transition-colors duration-300 transform hover:scale-105">
+            Kirim Jawaban
         </button>
     </div>
 
     <!-- New container for letter and collage, initially hidden -->
     <div id="letterAndCollageContainer" class="hidden full-screen-layout">
         <div class="letter-section">
-            <div id="poemContentScroller">
-                <h2 class="h2-title">Selamat ulang tahun, Sayang!</h2>
-                <p>Tak terasa, sudah berapa banyak tahun yang kita lewati bersama. Mengingat kembali hari lahirmu tanggal 17 Juli, rasanya baru kemarin kita bertemu di tahun 2014. Sejak itu, duniaku jadi jauh lebih berwarna.</p>
-                <p></p>
-                <p>Aku masih ingat jelas tanggal 14 September 2016, hari kita resmi jadian. Rasanya seperti baru kemarin kita memulai kisah cinta kita, penuh tawa, cerita, dan semua suka duka yang kita bagi. Dan puncaknya, tanggal 29 November 2022, kita berjanji untuk selalu bersama. Setiap hari bersamamu adalah anugerah terindah.</p>
-                <p></p>
-                <p>Terima kasih sudah menjadi istri yang luar biasa, teman hidup yang selalu mendukung, dan belahan jiwaku. Kamu adalah segalanya bagiku, Yul. Aku berharap kamu selalu bahagia, sehat, dan semua impianmu bisa tercapai.</p>
-                <p></p>
-                <p>Aku mencintaimu, sekarang dan selamanya.</p>
-                <p></p>
-                <p>Dengan segenap hati,</p>
-                <p></p>
-                <p class="signature-line">Niko Hasda Prayogo</p>
+            <!-- Added letter-typed-area to apply specific styling for content within the letter -->
+            <div class="letter-typed-area">
+                <div id="poemContentScroller">
+                    <h2 class="h2-title">Selamat ulang tahun, Sayang!</h2>
+                    <p>Tak terasa, sudah berapa banyak tahun yang kita lewati bersama. Mengingat kembali hari lahirmu tanggal 17 Juli, rasanya baru kemarin kita bertemu di tahun 2014. Sejak itu, duniaku jadi jauh lebih berwarna.</p>
+                    <p></p>
+                    <p>Aku masih ingat jelas tanggal 14 September 2016, hari kita resmi jadian. Rasanya seperti baru kemarin kita memulai kisah cinta kita, penuh tawa, cerita, dan semua suka duka yang kita bagi. Dan puncaknya, tanggal 29 November 2022, kita berjanji untuk selalu bersama. Setiap hari bersamamu adalah anugerah terindah.</p>
+                    <p></p>
+                    <p>Terima kasih sudah menjadi istri yang luar biasa, teman hidup yang selalu mendukung, dan belahan jiwaku. Kamu adalah segalanya bagiku, Yul. Aku berharap kamu selalu bahagia, sehat, dan semua impianmu bisa tercapai.</p>
+                    <p></p>
+                    <p>Aku mencintaimu, sekarang dan selamanya.</p>
+                    <p></p>
+                    <p>Dengan segenap hati,</p>
+                    <p></p>
+                    <p class="signature-line">Niko Hasda Prayogo</p>
+                </div>
             </div>
         </div>
         <div class="collage-section">
@@ -483,8 +552,11 @@
     </div>
 
     <!-- Audio Player - Autoplay enabled, no controls -->
+    <!--
+        CATATAN PENTING: File audio 'audio/music.mp3' harus tersedia di direktori yang sama
+        atau diganti dengan URL publik agar musik dapat diputar.
+    -->
     <audio id="backgroundMusic" loop>
-        <!-- Updated source to local audio file -->
         <source src="audio/music.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
@@ -503,11 +575,17 @@
         </svg>
     </div>
 
-    <script>
-        // Set the target date for the countdown to July 17, 2025
-        const targetDate = new Date('July 17, 2025 00:00:00').getTime();
+    <!-- Custom Modal for messages -->
+    <div id="customModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 id="modalTitle"></h3>
+            <p id="modalMessage"></p>
+            <button id="modalCloseButton" class="modal-close-button">Tutup</button>
+        </div>
+    </div>
 
-        // Define SVG paths for heart and star shapes
+    <script>
+        // Define SVG paths for heart and star shapes for confetti
         const heart = confetti.shapeFromPath({
             path: 'M10 3.2C10 1.6 8.4 0 6.8 0S3.2 1.6 3.2 3.2c0 1.6 1.6 3.2 3.2 4.8 1.6-1.6 3.2-3.2 3.2-4.8z',
             width: 10,
@@ -520,81 +598,52 @@
             height: 10
         });
 
-        // Array of image URLs for the collage - UPDATED TO ACTUAL FILENAMES
+        // Array of image URLs for the collage
+        // CATATAN PENTING: File gambar harus tersedia di direktori 'images/'
+        // atau diganti dengan URL publik agar gambar dapat ditampilkan.
         const collageImages = [
-            'images/1.jpg',
-            'images/2.jpg',
-            'images/3.jpg',
-            'images/4.jpg',
-            'images/5.jpg',
-            'images/6.jpg',
-            'images/7.jpg',
-            'images/8.jpg',
-            'images/9.jpg',
-            'images/10.jpg',
-            'images/11.jpg',
-            'images/12.jpg',
-            'images/13.jpg',
-            'images/14.jpg',
-            'images/15.jpg',
-            'images/16.jpg',
-            'images/17.jpg',
-            'images/18.jpg',
-            'images/19.jpg',
-            'images/20.jpg',
-            'images/21.jpg',
-            'images/22.jpg',
-            'images/23.jpg',
-            'images/24.jpg',
-            'images/25.jpg',
-            'images/26.jpg',
-            'images/27.jpg',
-            'images/28.jpg',
-            'images/29.jpg',
-            'images/30.jpg',
-            'images/31.jpg',
-            'images/32.jpg',
-            'images/33.jpg',
-            'images/34.jpg',
-            'images/35.jpg',
-            'images/36.jpg',
-            'images/37.jpg',
-            'images/38.jpg',
-            'images/39.jpg',
-            'images/40.jpg',
-            'images/41.jpg',
-            'images/42.jpg',
-            'images/43.jpg',
-            'images/44.jpg',
-            'images/45.jpg',
-            'images/46.jpg',
-            'images/47.jpg',
-            'images/48.jpg',
-            'images/49.jpg',
-            'images/50.jpg',
-            'images/51.jpg',
-            'images/52.jpg',
-            'images/53.jpg'
-            // Add more image paths here if you have more photos in your 'images' folder
-            // e.g., 'images/PXL_20250603_xxxxxxxxx.jpg',
+            'images/1.jpg', 'images/2.jpg', 'images/3.jpg', 'images/4.jpg', 'images/5.jpg',
+            'images/6.jpg', 'images/7.jpg', 'images/8.jpg', 'images/9.jpg', 'images/10.jpg',
+            'images/11.jpg', 'images/12.jpg', 'images/13.jpg', 'images/14.jpg', 'images/15.jpg',
+            'images/16.jpg', 'images/17.jpg', 'images/18.jpg', 'images/19.jpg', 'images/20.jpg',
+            'images/21.jpg', 'images/22.jpg', 'images/23.jpg', 'images/24.jpg', 'images/25.jpg',
+            'images/26.jpg', 'images/27.jpg', 'images/28.jpg', 'images/29.jpg', 'images/30.jpg',
+            'images/31.jpg', 'images/32.jpg', 'images/33.jpg', 'images/34.jpg', 'images/35.jpg',
+            'images/36.jpg', 'images/37.jpg', 'images/38.jpg', 'images/39.jpg', 'images/40.jpg',
+            'images/41.jpg', 'images/42.jpg', 'images/43.jpg', 'images/44.jpg', 'images/45.jpg',
+            'images/46.jpg', 'images/47.jpg', 'images/48.jpg', 'images/49.jpg', 'images/50.jpg',
+            'images/51.jpg', 'images/52.jpg', 'images/53.jpg'
         ];
-        let currentImageIndex = 0;
-        let collageInterval; // To store the interval for collage
-
+        
         // Audio elements
         const backgroundMusic = document.getElementById('backgroundMusic');
         const musicIllustration = document.getElementById('musicIllustration');
 
         // Flag to ensure music only attempts to play once on first interaction
-        let musicPlayedOnce = false; // Declared in global scope
+        let musicPlayedOnce = false;
+
+        // Function to show custom modal messages
+        function showModal(title, message) {
+            const modalOverlay = document.getElementById('customModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalMessage = document.getElementById('modalMessage');
+            const modalCloseButton = document.getElementById('modalCloseButton');
+
+            modalTitle.textContent = title;
+            modalMessage.textContent = message;
+            modalOverlay.classList.remove('hidden');
+            modalOverlay.classList.add('visible');
+
+            modalCloseButton.onclick = () => {
+                modalOverlay.classList.remove('visible');
+                modalOverlay.classList.add('hidden');
+            };
+        }
 
         // Function to display poem lines with auto-scrolling for mobile
         function displayPoemLines() {
             const poemContentScroller = document.getElementById('poemContentScroller');
             
-            // Clear existing content if any (though it's static now)
-            // poemContentScroller.innerHTML = ''; 
-
             // Duplicate content for seamless looping (only if on mobile)
             if (window.innerWidth <= 767) { // Check for mobile screen size
                 const originalContent = poemContentScroller.innerHTML;
@@ -606,16 +655,24 @@
             let totalPoemHeight = 0;
             const poemLines = poemContentScroller.children; // Get all direct children (h2, p)
             if (poemLines.length > 0) {
-                // Sum up height of original content (first third if duplicated)
-                for (let i = 0; i < (window.innerWidth <= 767 ? letterContentParagraphs.length : poemLines.length); i++) {
-                    if (poemLines[i]) {
-                        totalPoemHeight += poemLines[i].offsetHeight;
-                        // Add margin-bottom if it's a paragraph (line-height handles internal spacing)
-                        if (poemLines[i].tagName === 'P' && poemLines[i].textContent === '') { // Blank lines
-                             totalPoemHeight += parseInt(window.getComputedStyle(poemLines[i]).lineHeight); // Add height for blank lines
-                        }
+                // Use a temporary div to measure the actual content height without animation affecting it
+                const tempDiv = document.createElement('div');
+                tempDiv.style.visibility = 'hidden';
+                tempDiv.style.position = 'absolute';
+                tempDiv.style.width = poemContentScroller.offsetWidth + 'px'; // Match width
+                tempDiv.style.fontFamily = window.getComputedStyle(poemContentScroller).fontFamily;
+                tempDiv.style.fontSize = window.getComputedStyle(poemContentScroller).fontSize;
+                tempDiv.style.lineHeight = window.getComputedStyle(poemContentScroller).lineHeight;
+                tempDiv.innerHTML = poemContentScroller.children[0].outerHTML; // Start with title
+                // Only measure one set of original content
+                for (let i = 1; i < poemLines.length / (window.innerWidth <= 767 ? 3 : 1); i++) { 
+                    if (poemLines[i]) { // Ensure element exists
+                        tempDiv.innerHTML += poemLines[i].outerHTML;
                     }
                 }
+                document.body.appendChild(tempDiv);
+                totalPoemHeight = tempDiv.scrollHeight; // Use scrollHeight to get full content height
+                document.body.removeChild(tempDiv);
             }
 
             if (totalPoemHeight > 0 && window.innerWidth <= 767) { // Only animate on mobile
@@ -670,6 +727,11 @@
                 img.src = src;
                 img.alt = "Kolase Foto";
                 img.classList.add('collage-image');
+                // Add onerror to display a placeholder if the image fails to load
+                img.onerror = () => {
+                    img.src = `https://placehold.co/250x250/cccccc/000000?text=Image+Error`;
+                    console.error(`Failed to load image: ${src}. Displaying placeholder.`);
+                };
                 imageCarousel.appendChild(img);
             });
 
@@ -685,8 +747,11 @@
                 // Sum up height of *one set* of original images
                 for (let i = 0; i < collageImages.length; i++) {
                     const imgElement = imageCarousel.children[i];
-                    if (imgElement) {
+                    if (imgElement && imgElement.complete) { // Ensure image is fully loaded
                         totalImagesHeight += imgElement.offsetHeight + imageMarginBottom;
+                    } else if (imgElement) {
+                        // If image not complete, try to use naturalHeight/Width or a fallback size
+                        totalImagesHeight += 250 + imageMarginBottom; // Fallback to max-width size + margin
                     }
                 }
                 // Adjust for the last image's margin not contributing to scrollable height
@@ -711,7 +776,7 @@
                     
                     // Apply animation
                     imageCarousel.style.animation = `scrollUpDynamic ${animationDuration}s linear infinite`;
-                    console.log(`Collage animation started: totalHeight=${totalImagesHeight}px, duration=${animationDuration}s`);
+                    console.log(`Collage animation started: totalImagesHeight=${totalImagesHeight}px, duration=${animationDuration}s`);
                 } else {
                     console.warn("Could not calculate total image height for collage animation.");
                 }
@@ -740,17 +805,16 @@
 
             // Fallback if images are cached or load too fast for onload to trigger calculation
             setTimeout(() => {
-                if (totalImagesHeight === 0) { // If height wasn't calculated by onload
+                if (imagesLoadedCount < duplicatedCollageImages.length) { // If not all images triggered onload
                     calculateAndAnimate();
                 }
-            }, 1000); // Give it a second
+            }, 1500); // Give it a bit more time for images to load
         }
 
 
-        // Function to trigger the end animation and message
+        // Function to trigger the end animation and message (after quiz is passed)
         function triggerEndAnimation() {
-            clearInterval(countdownInterval); // Stop the countdown
-            document.getElementById('mainCountdownContainer').classList.add('hidden'); // Hide the main countdown container
+            document.getElementById('mainQuizContainer').classList.add('hidden'); // Hide the quiz container
 
             const messageElement = document.getElementById('countdown-message');
             messageElement.classList.remove('hidden'); // Show message
@@ -785,9 +849,6 @@
 
                 continueButton.addEventListener('click', showLetterAndCollage);
             }, 2500); // Wait for all confetti to finish + a little extra
-
-            // Hide the skip button if it was still visible
-            document.getElementById('skipButton').classList.add('hidden');
 
             // Play music and show illustration only if not played yet (triggered by user interaction)
             if (!musicPlayedOnce) {
@@ -828,29 +889,146 @@
             }, 500); // Match this duration with the CSS transition duration
         }
 
+        // Quiz logic
+        const submitQuizButton = document.getElementById('submitQuizButton');
+        submitQuizButton.addEventListener('click', checkQuizAnswers);
 
-        // Update the countdown every 1 second
-        const countdownInterval = setInterval(function() {
-            const now = new Date().getTime();
-            const distance = targetDate - now;
+        // Function to populate day, month, and year dropdowns
+        function populateDateDropdowns(dayId, monthId, yearId, startYear, endYear) {
+            const daySelect = document.getElementById(dayId);
+            const monthSelect = document.getElementById(monthId);
+            const yearSelect = document.getElementById(yearId);
 
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            document.getElementById('days').innerHTML = days;
-            document.getElementById('hours').innerHTML = hours;
-            document.getElementById('minutes').innerHTML = minutes;
-            document.getElementById('seconds').innerHTML = seconds;
-
-            if (distance < 0) {
-                triggerEndAnimation();
+            // Populate Days
+            for (let i = 1; i <= 31; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                daySelect.appendChild(option);
             }
-        }, 1000);
 
-        // Add event listener to the skip button
-        document.getElementById('skipButton').addEventListener('click', triggerEndAnimation);
+            // Populate Months
+            const monthNames = [
+                "Januari", "Februari", "Maret", "April", "Mei", "Juni",
+                "Juli", "Agustus", "September", "Oktober", "November", "Desember"
+            ];
+            monthNames.forEach((name, index) => {
+                const option = document.createElement('option');
+                option.value = index + 1; // Month index + 1 for actual month number
+                option.textContent = name;
+                monthSelect.appendChild(option);
+            });
+
+            // Populate Years
+            for (let i = endYear; i >= startYear; i--) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i;
+                yearSelect.appendChild(option);
+            }
+
+            // Add default "Pilih..." option
+            const defaultDayOption = document.createElement('option');
+            defaultDayOption.value = '';
+            defaultDayOption.textContent = 'Hari';
+            defaultDayOption.selected = true;
+            defaultDayOption.disabled = true;
+            daySelect.prepend(defaultDayOption);
+
+            const defaultMonthOption = document.createElement('option');
+            defaultMonthOption.value = '';
+            defaultMonthOption.textContent = 'Bulan';
+            defaultMonthOption.selected = true;
+            defaultMonthOption.disabled = true;
+            monthSelect.prepend(defaultMonthOption);
+
+            const defaultYearOption = document.createElement('option');
+            defaultYearOption.value = '';
+            defaultYearOption.textContent = 'Tahun';
+            defaultYearOption.selected = true;
+            defaultYearOption.disabled = true;
+            yearSelect.prepend(defaultYearOption);
+        }
+
+        // Initialize date dropdowns on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentYear = new Date().getFullYear();
+            populateDateDropdowns('q2-day', 'q2-month', 'q2-year', 2010, currentYear); // For Jadian date
+            populateDateDropdowns('q3-day', 'q3-month', 'q3-year', 2010, currentYear); // For Menikah date
+        });
+
+        function normalizeAnswer(answer) {
+            // Convert to lowercase, trim whitespace, remove extra spaces and punctuation
+            return answer.toLowerCase().trim()
+                         .replace(/\s+/g, ' ') // Replace multiple spaces with single space
+                         .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,""); // Remove common punctuation
+        }
+
+        function checkQuizAnswers() {
+            const q1Answer = normalizeAnswer(document.getElementById('q1').value);
+            
+            // Get values from date dropdowns for q2
+            const q2Day = document.getElementById('q2-day').value;
+            const q2Month = document.getElementById('q2-month').value;
+            const q2Year = document.getElementById('q2-year').value;
+            let q2Answer = '';
+            if (q2Day && q2Month && q2Year) {
+                const monthName = new Date(q2Year, q2Month - 1).toLocaleString('id-ID', { month: 'long' });
+                q2Answer = normalizeAnswer(`${q2Day} ${monthName} ${q2Year}`);
+            }
+
+            // Get values from date dropdowns for q3
+            const q3Day = document.getElementById('q3-day').value;
+            const q3Month = document.getElementById('q3-month').value;
+            const q3Year = document.getElementById('q3-year').value;
+            let q3Answer = '';
+            if (q3Day && q3Month && q3Year) {
+                const monthName = new Date(q3Year, q3Month - 1).toLocaleString('id-ID', { month: 'long' });
+                q3Answer = normalizeAnswer(`${q3Day} ${monthName} ${q3Year}`);
+            }
+
+            const correctAnswers = {
+                q1: '2014',
+                q2: '14 september 2016',
+                q3: '29 november 2022'
+            };
+
+            let allCorrect = true;
+            let incorrectMessages = [];
+
+            if (q1Answer !== normalizeAnswer(correctAnswers.q1)) {
+                allCorrect = false;
+                incorrectMessages.push("Jawaban pertanyaan 1 salah.");
+            }
+            if (q2Answer !== normalizeAnswer(correctAnswers.q2)) {
+                allCorrect = false;
+                incorrectMessages.push("Jawaban pertanyaan 2 salah.");
+            }
+            if (q3Answer !== normalizeAnswer(correctAnswers.q3)) {
+                allCorrect = false;
+                incorrectMessages.push("Jawaban pertanyaan 3 salah.");
+            }
+
+            if (allCorrect) {
+                showModal("Selamat!", "Semua jawaban benar! Mari kita lanjutkan ke momen spesialmu.");
+                // Delay showing the main animation slightly to allow modal to be read
+                setTimeout(triggerEndAnimation, 2000); 
+            } else {
+                showModal("Ups!", "Ada jawaban yang salah. Coba lagi! " + incorrectMessages.join(" "));
+            }
+
+            // Play music on first interaction with the quiz (submit button click)
+            if (!musicPlayedOnce) {
+                backgroundMusic.volume = 0.5;
+                backgroundMusic.play().then(() => {
+                    musicIllustration.style.opacity = '1'; // Show music illustration
+                    musicPlayedOnce = true;
+                    console.log("Music started playing from quiz submit and illustration shown.");
+                }).catch(e => {
+                    console.warn("Music play on quiz submit was prevented:", e);
+                });
+            }
+        }
 
         // --- Universal click listener for music playback ---
         // This attempts to play music on the very first user interaction with the document
@@ -866,7 +1044,7 @@
                     document.removeEventListener('click', playMusicOnFirstInteraction);
                 }).catch(e => {
                     console.warn("Music play on first interaction was prevented:", e);
-                    // If still blocked, user might need to click the 'Lanjut' button or wait for countdown end.
+                    // If still blocked, user might need to click the 'Lanjut' button or wait for quiz.
                 });
             }
         }, { once: true }); // Use { once: true } to ensure it only runs once
